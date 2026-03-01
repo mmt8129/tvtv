@@ -487,43 +487,36 @@
         }
 
         // M3U ayrıştırıcı
-        function parseM3U(content) {
-            const lines = content.split('\n');
-            channels = [];
+        // M3U ayrıştırıcı (proxy'li)
+function parseM3U(content) {
+    const lines = content.split('\n');
+    channels = [];
+    const PROXY_URL = 'https://cors-proxy.your-subdomain.workers.dev';
+    
+    for (let i = 0; i < lines.length; i++) {
+        if (lines[i].startsWith('#EXTINF:')) {
+            let name = lines[i].split(',')[1] || 'Kanal ' + (channels.length + 1);
+            name = name.replace(/group-title="[^"]*"/g, '').trim();
             
-            for (let i = 0; i < lines.length; i++) {
-                if (lines[i].startsWith('#EXTINF:')) {
-                    // Kanal adını al (grup-title varsa temizle)
-                    let name = lines[i].split(',')[1] || 'Kanal ' + (channels.length + 1);
-                    name = name.replace(/group-title="[^"]*"/g, '').trim();
-                    
-                    // URL'yi al (bir sonraki satır)
-                    let url = '';
-                    for (let j = i + 1; j < lines.length; j++) {
-                        if (lines[j].trim() && !lines[j].startsWith('#')) {
-                            url = lines[j].trim();
-                            break;
-                        }
-                    }
-                    
-                    if (url) {
-                        channels.push({ name, url });
-                    }
+            let url = '';
+            for (let j = i + 1; j < lines.length; j++) {
+                if (lines[j].trim() && !lines[j].startsWith('#')) {
+                    url = lines[j].trim();
+                    break;
                 }
             }
             
-            if (channels.length === 0) {
-                // Test kanalları
-                channels = [
-                    { name: 'Big Buck Bunny (Test)', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
-                    { name: 'Sintel (Test)', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4' }
-                ];
+            if (url) {
+                // URL'yi proxy'den geçir
+                const proxyUrl = `${PROXY_URL}/?url=${encodeURIComponent(url)}`;
+                channels.push({ name, url: proxyUrl, originalUrl: url });
             }
-            
-            renderChannelList();
-            playChannel(0);
         }
-
+    }
+    
+    renderChannelList();
+    playChannel(0);
+}
         // Kanal listesini render et
         function renderChannelList() {
             if (!channelListElement) return;
