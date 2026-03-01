@@ -587,7 +587,7 @@ function parseM3U(content) {
 const PROXY_URL = 'https://proud-cake-0566.06mmt8129.workers.dev/';
 
 // Kanal oynat (düzeltilmiş versiyon)
-// TEST MODU: Worker'sız direkt oynat
+// Worker'lı oynat (düzeltilmiş)
 function playChannel(index) {
     if (index < 0) index = channels.length - 1;
     if (index >= channels.length) index = 0;
@@ -599,22 +599,49 @@ function playChannel(index) {
     hasError = false;
     errorMessage.classList.remove('active');
     
-    console.log('Kanal:', channel.name);
-    console.log('URL:', channel.url);
+    // Worker URL'si (KENDİNLE DEĞİŞTİR)
+    const WORKER_URL = 'https://cors-proxy.your-subdomain.workers.dev';
+    const encodedUrl = encodeURIComponent(channel.url);
+    const proxyUrl = `${WORKER_URL}/?url=${encodedUrl}`;
     
-    // WORKER'SIZ DİREKT OYNAT
+    console.log('Kanal:', channel.name);
+    console.log('Orjinal:', channel.url);
+    console.log('Proxy:', proxyUrl);
+    
+    // Proxy'yi dene
     player.src({
-        src: channel.url,
+        src: proxyUrl,
         type: getVideoType(channel.url)
     });
     
+    // Hata olursa direkt oynat
+    player.one('error', () => {
+        console.log('Proxy hatası, direkt oynatılıyor...');
+        player.src({
+            src: channel.url,
+            type: getVideoType(channel.url)
+        });
+        player.play().catch(e => {
+            console.error('Direkt oynatma da hata:', e);
+            showError();
+        });
+    });
+    
     player.play().catch(e => {
-        console.error('Direkt oynatma hatası:', e);
-        showError();
+        console.error('Proxy oynatma hatası:', e);
+        // Error event zaten tetiklenecek
     });
     
     player.one('playing', () => {
-        console.log('✅ Oynatma başladı (worker olmadan)');
+        console.log('✅ Oynatma başladı');
+        if (!hasError && !listVisible) {
+            setTimeout(() => {
+                if (!listVisible) {
+                    infoModal.classList.remove('active');
+                    infoModalVisible = false;
+                }
+            }, 2000);
+        }
     });
     
     updateSelectedChannel();
@@ -622,22 +649,6 @@ function playChannel(index) {
         scrollToCurrentChannel();
     }
 }
-
-// Video tipini belirle (aynı kalabilir)
-function getVideoType(url) {
-    if (url.includes('.m3u8')) {
-        return 'application/x-mpegURL';
-    } else if (url.includes('.mpd')) {
-        return 'application/dash+xml';
-    } else if (url.includes('.mp4')) {
-        return 'video/mp4';
-    } else if (url.includes('.ts')) {
-        return 'video/MP2T';
-    } else {
-        return 'video/mp4';
-    }
-}
-
         // Bilgi modalını göster
         function showInfoModal(channelName, showBuffer = true) {
             channelNameElement.textContent = channelName;
