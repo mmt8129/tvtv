@@ -6,8 +6,17 @@
     <title>TV Box M3U Oynatıcı</title>
     <meta name="theme-color" content="#000000">
     <link rel="manifest" href="manifest.json">
+    
+    <!-- Güvenlik politikasını gevşet -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * self 'unsafe-inline' 'unsafe-eval' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
+    
+    <!-- HLS.js ve Video.js kütüphaneleri -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/video.js@7.21.5/dist/video.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/video.js@7.21.5/dist/video-js.min.css" rel="stylesheet">
+    
     <style>
+        /* Aynı CSS stilleri buraya gelecek (önceki kodla aynı) */
         * {
             margin: 0;
             padding: 0;
@@ -371,8 +380,8 @@
         </div>
     </div>
 
-    <!-- Video Player -->
-    <video id="video-player" autoplay playsinline></video>
+    <!-- Video Player (Video.js ile güçlendirilmiş) -->
+    <video id="video-player" class="video-js vjs-default-skin vjs-big-play-centered" controls autoplay playsinline preload="auto"></video>
 
     <!-- Dijital Saat -->
     <div id="clock">20:45</div>
@@ -405,29 +414,23 @@
     </div>
 
     <script>
-
-// PWA için Service Worker'ı kaydet
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-            .then(registration => {
-                console.log('ServiceWorker başarıyla kaydedildi:', registration.scope);
-                
-                // Periyodik senkronizasyonu kontrol et
-                if ('periodicSync' in registration) {
-                    registration.periodicSync.register('clean-cache', {
-                        minInterval: 30 * 24 * 60 * 60 * 1000 // 30 gün
-                    }).catch(e => console.log('Periodic sync desteklenmiyor:', e));
+        // Video.js player'ı başlat
+        const player = videojs('video-player', {
+            html5: {
+                hls: {
+                    enableLowInitialPlaylist: true,
+                    smoothQualityChange: true,
+                    overrideNative: true
                 }
-            })
-            .catch(error => {
-                console.log('ServiceWorker kayıt hatası:', error);
-            });
-    });
-}
+            },
+            liveui: true,
+            responsive: true,
+            fluid: true,
+            controls: false,
+            autoplay: true,
+            preload: 'auto'
+        });
 
-
-        
         // Uygulama durumu
         let channels = [];
         let currentChannelIndex = 0;
@@ -438,12 +441,9 @@ if ('serviceWorker' in navigator) {
         let listTimer = null;
         let volumeTimer = null;
         let infoTimer = null;
-        let loadingTimer = null;
-        let isPlaying = false;
         let hasError = false;
 
         // DOM elementleri
-        const videoPlayer = document.getElementById('video-player');
         const clockElement = document.getElementById('clock');
         const channelListContainer = document.getElementById('channel-list-container');
         const channelListElement = document.getElementById('channel-list');
@@ -474,34 +474,12 @@ if ('serviceWorker' in navigator) {
                 const text = await response.text();
                 parseM3U(text);
             } catch (error) {
-                console.error('M3U yüklenemedi:', error);
-                // Örnek veri
+                console.error('M3U yüklenemedi, örnek kanallar kullanılıyor:', error);
+                // Test kanalları (çalışan örnekler)
                 channels = [
-                    { name: 'TRT 1', url: 'https://example.com/stream1.m3u8' },
-                    { name: 'Kanal D', url: 'https://example.com/stream2.m3u8' },
-                    { name: 'Show TV', url: 'https://example.com/stream3.m3u8' },
-                    { name: 'Star TV', url: 'https://example.com/stream4.m3u8' },
-                    { name: 'ATV', url: 'https://example.com/stream5.m3u8' },
-                    { name: 'Fox TV', url: 'https://example.com/stream6.m3u8' },
-                    { name: 'TV8', url: 'https://example.com/stream7.m3u8' },
-                    { name: 'Kanal 7', url: 'https://example.com/stream8.m3u8' },
-                    { name: '360 TV', url: 'https://example.com/stream9.m3u8' },
-                    { name: 'Beyaz TV', url: 'https://example.com/stream10.m3u8' },
-                    { name: 'Ülke TV', url: 'https://example.com/stream11.m3u8' },
-                    { name: 'Haber Türk', url: 'https://example.com/stream12.m3u8' },
-                    { name: 'CNN Türk', url: 'https://example.com/stream13.m3u8' },
-                    { name: 'NTV', url: 'https://example.com/stream14.m3u8' },
-                    { name: 'A Haber', url: 'https://example.com/stream15.m3u8' },
-                    { name: 'TGRT Haber', url: 'https://example.com/stream16.m3u8' },
-                    { name: '24 TV', url: 'https://example.com/stream17.m3u8' },
-                    { name: 'Bloomberg HT', url: 'https://example.com/stream18.m3u8' },
-                    { name: 'Ekotürk', url: 'https://example.com/stream19.m3u8' },
-                    { name: 'TRT Spor', url: 'https://example.com/stream20.m3u8' },
-                    { name: 'TRT Spor 2', url: 'https://example.com/stream21.m3u8' },
-                    { name: 'A Spor', url: 'https://example.com/stream22.m3u8' },
-                    { name: 'Fenerbahçe TV', url: 'https://example.com/stream23.m3u8' },
-                    { name: 'Beşiktaş TV', url: 'https://example.com/stream24.m3u8' },
-                    { name: 'Galatasaray TV', url: 'https://example.com/stream25.m3u8' }
+                    { name: 'Big Buck Bunny (Test)', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
+                    { name: 'Sintel (Test)', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4' },
+                    { name: 'Test HLS', url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8' }
                 ];
                 renderChannelList();
                 playChannel(0);
@@ -515,20 +493,30 @@ if ('serviceWorker' in navigator) {
             
             for (let i = 0; i < lines.length; i++) {
                 if (lines[i].startsWith('#EXTINF:')) {
-                    const match = lines[i].match(/,([^,]+)$/);
-                    const name = match ? match[1].trim() : 'Kanal ' + (channels.length + 1);
-                    const url = lines[i + 1]?.trim();
-                    if (url && !url.startsWith('#')) {
+                    // Kanal adını al (grup-title varsa temizle)
+                    let name = lines[i].split(',')[1] || 'Kanal ' + (channels.length + 1);
+                    name = name.replace(/group-title="[^"]*"/g, '').trim();
+                    
+                    // URL'yi al (bir sonraki satır)
+                    let url = '';
+                    for (let j = i + 1; j < lines.length; j++) {
+                        if (lines[j].trim() && !lines[j].startsWith('#')) {
+                            url = lines[j].trim();
+                            break;
+                        }
+                    }
+                    
+                    if (url) {
                         channels.push({ name, url });
                     }
                 }
             }
             
             if (channels.length === 0) {
-                // Örnek veri
+                // Test kanalları
                 channels = [
-                    { name: 'TRT 1', url: 'https://example.com/stream1.m3u8' },
-                    { name: 'Kanal D', url: 'https://example.com/stream2.m3u8' }
+                    { name: 'Big Buck Bunny (Test)', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
+                    { name: 'Sintel (Test)', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4' }
                 ];
             }
             
@@ -596,77 +584,76 @@ if ('serviceWorker' in navigator) {
             const items = document.querySelectorAll('.channel-item');
             if (items.length === 0) return;
             
-            const itemHeight = 90; // 70px yükseklik + 20px margin
+            const itemHeight = 90;
             const targetScroll = (currentChannelIndex + channels.length) * itemHeight - (channelListElement.clientHeight / 2) + (itemHeight / 2);
             
             channelListElement.scrollTop = targetScroll;
         }
 
-       // Kanal oynat (HLS.js destekli)
-function playChannel(index) {
-    if (index < 0) index = channels.length - 1;
-    if (index >= channels.length) index = 0;
-    
-    currentChannelIndex = index;
-    const channel = channels[currentChannelIndex];
-    
-    showInfoModal(channel.name, true);
-    hasError = false;
-    errorMessage.classList.remove('active');
-    
-    // HLS.js kontrolü
-    if (channel.url.includes('.m3u8')) {
-        if (Hls.isSupported()) {
-            const hls = new Hls({
-                debug: false,
-                enableWorker: true,
-                lowLatencyMode: true,
-                backBufferLength: 90
+        // Kanal oynat (gelişmiş versiyon)
+        function playChannel(index) {
+            if (index < 0) index = channels.length - 1;
+            if (index >= channels.length) index = 0;
+            
+            currentChannelIndex = index;
+            const channel = channels[currentChannelIndex];
+            
+            showInfoModal(channel.name, true);
+            hasError = false;
+            errorMessage.classList.remove('active');
+            
+            // Video.js ile oynat
+            player.src({
+                src: channel.url,
+                type: getVideoType(channel.url)
             });
             
-            // Önceki HLS instance'ını temizle
-            if (window.currentHls) {
-                window.currentHls.destroy();
-            }
-            
-            hls.loadSource(channel.url);
-            hls.attachMedia(videoPlayer);
-            
-            hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                videoPlayer.play().catch(e => {
-                    console.log('Otomatik oynatma engellendi:', e);
-                    showError();
-                });
+            player.play().catch(e => {
+                console.error('Oynatma hatası:', e);
+                showError();
             });
             
-            hls.on(Hls.Events.ERROR, (event, data) => {
-                if (data.fatal) {
-                    console.error('HLS hatası:', data);
-                    showError();
+            // Video olaylarını dinle
+            player.one('playing', () => {
+                if (!hasError && !listVisible) {
+                    setTimeout(() => {
+                        if (!listVisible) {
+                            infoModal.classList.remove('active');
+                            infoModalVisible = false;
+                        }
+                    }, 2000);
                 }
             });
             
-            window.currentHls = hls;
-        } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
-            // Safari için native HLS desteği
-            videoPlayer.src = channel.url;
-            videoPlayer.load();
-            videoPlayer.play().catch(showError);
-        } else {
-            showError();
+            player.one('error', () => {
+                showError();
+            });
+            
+            player.one('waiting', () => {
+                showInfoModal(channel.name, true);
+            });
+            
+            updateSelectedChannel();
+            if (!listVisible) {
+                scrollToCurrentChannel();
+            }
         }
-    } else {
-        // Normal video dosyaları için (MP4, TS, vs)
-        videoPlayer.src = channel.url;
-        videoPlayer.load();
-        videoPlayer.play().catch(showError);
-    }
-    
-    updateSelectedChannel();
-    if (!listVisible) {
-        scrollToCurrentChannel();
-    }
-}
+
+        // Video tipini belirle
+        function getVideoType(url) {
+            if (url.includes('.m3u8')) {
+                return 'application/x-mpegURL';
+            } else if (url.includes('.mpd')) {
+                return 'application/dash+xml';
+            } else if (url.includes('.mp4')) {
+                return 'video/mp4';
+            } else if (url.includes('.ts')) {
+                return 'video/MP2T';
+            } else {
+                return 'video/mp4';
+            }
+        }
+
         // Bilgi modalını göster
         function showInfoModal(channelName, showBuffer = true) {
             channelNameElement.textContent = channelName;
@@ -679,7 +666,6 @@ function playChannel(index) {
             infoModal.classList.add('active');
             infoModalVisible = true;
             
-            // 2 saniye sonra kapat (eğer hata yoksa)
             if (infoTimer) clearTimeout(infoTimer);
             infoTimer = setTimeout(() => {
                 if (!hasError && !listVisible) {
@@ -699,14 +685,12 @@ function playChannel(index) {
         // Ses seviyesini ayarla
         function setVolume(change) {
             currentVolume = Math.max(0, Math.min(100, currentVolume + change));
-            videoPlayer.volume = currentVolume / 100;
+            player.volume(currentVolume / 100);
             
-            // Ses barını göster
             volumeBarContainer.classList.add('active');
             volumeLevel.style.height = currentVolume + '%';
             volumeText.textContent = currentVolume;
             
-            // 2 saniye sonra gizle
             if (volumeTimer) clearTimeout(volumeTimer);
             volumeTimer = setTimeout(() => {
                 volumeBarContainer.classList.remove('active');
@@ -720,7 +704,6 @@ function playChannel(index) {
                 listVisible = true;
                 scrollToCurrentChannel();
                 
-                // 3 saniye sayaç başlat
                 let counter = 3;
                 listTimerElement.classList.add('active');
                 listTimerElement.textContent = counter;
@@ -748,25 +731,20 @@ function playChannel(index) {
 
         // Tuş olaylarını dinle
         document.addEventListener('keydown', (e) => {
-            // Sadece TV kumanda tuşlarını dinle
             const key = e.key;
             
             switch (key) {
                 case 'ArrowUp':
                     e.preventDefault();
                     if (listVisible) {
-                        // Listede yukarı git
                         channelListElement.scrollTop -= 90;
-                        // Seçili kanalı güncelle (görsel için)
                         const items = document.querySelectorAll('.channel-item');
-                        const midIndex = Math.floor(items.length / 2);
                         const visibleIndex = Math.floor((channelListElement.scrollTop + channelListElement.clientHeight / 2) / 90) - Math.floor(channels.length / 2);
                         if (visibleIndex >= 0 && visibleIndex < channels.length) {
                             currentChannelIndex = visibleIndex;
                             updateSelectedChannel();
                         }
                     } else {
-                        // Önceki kanal
                         playChannel(currentChannelIndex - 1);
                     }
                     break;
@@ -774,18 +752,14 @@ function playChannel(index) {
                 case 'ArrowDown':
                     e.preventDefault();
                     if (listVisible) {
-                        // Listede aşağı git
                         channelListElement.scrollTop += 90;
-                        // Seçili kanalı güncelle (görsel için)
                         const items = document.querySelectorAll('.channel-item');
-                        const midIndex = Math.floor(items.length / 2);
                         const visibleIndex = Math.floor((channelListElement.scrollTop + channelListElement.clientHeight / 2) / 90) - Math.floor(channels.length / 2);
                         if (visibleIndex >= 0 && visibleIndex < channels.length) {
                             currentChannelIndex = visibleIndex;
                             updateSelectedChannel();
                         }
                     } else {
-                        // Sonraki kanal
                         playChannel(currentChannelIndex + 1);
                     }
                     break;
@@ -793,11 +767,9 @@ function playChannel(index) {
                 case 'ArrowRight':
                     e.preventDefault();
                     if (listVisible) {
-                        // Seçili kanalı oynat
                         playChannel(currentChannelIndex);
                         toggleList(false);
                     } else {
-                        // Ses aç
                         setVolume(50);
                     }
                     break;
@@ -805,7 +777,6 @@ function playChannel(index) {
                 case 'ArrowLeft':
                     e.preventDefault();
                     if (!listVisible) {
-                        // Ses kıs
                         setVolume(-50);
                     }
                     break;
@@ -814,7 +785,6 @@ function playChannel(index) {
                 case 'OK':
                     e.preventDefault();
                     if (!listVisible) {
-                        // Listeyi aç
                         toggleList(true);
                     }
                     break;
@@ -823,10 +793,8 @@ function playChannel(index) {
                 case 'Escape':
                     e.preventDefault();
                     if (listVisible) {
-                        // Listeyi kapat
                         toggleList(false);
                     } else if (infoModalVisible) {
-                        // Bilgi modalını kapat
                         infoModal.classList.remove('active');
                         infoModalVisible = false;
                     }
@@ -834,49 +802,23 @@ function playChannel(index) {
             }
         });
 
-        // Video olayları
-        videoPlayer.addEventListener('waiting', () => {
-            // Yükleniyor durumu
-            showInfoModal(channels[currentChannelIndex]?.name, true);
-        });
-
-        videoPlayer.addEventListener('playing', () => {
-            // Yükleme tamamlandı
-            if (!hasError && !listVisible) {
-                setTimeout(() => {
-                    if (!listVisible) {
-                        infoModal.classList.remove('active');
-                        infoModalVisible = false;
-                    }
-                }, 2000);
-            }
-        });
-
-        videoPlayer.addEventListener('error', () => {
-            showError();
-        });
-
         // Liste kaydırma olayı
         channelListElement.addEventListener('scroll', () => {
             if (!listVisible) return;
             
-            // Sonsuz döngü kontrolü
             const items = document.querySelectorAll('.channel-item');
             const itemHeight = 90;
             const totalHeight = items.length * itemHeight;
             const scrollTop = channelListElement.scrollTop;
             
-            // Başa yaklaştıysa ortaya kaydır
             if (scrollTop < itemHeight * channels.length) {
                 channelListElement.scrollTop = scrollTop + itemHeight * channels.length;
             }
             
-            // Sona yaklaştıysa ortaya kaydır
             if (scrollTop > totalHeight - itemHeight * channels.length * 2) {
                 channelListElement.scrollTop = scrollTop - itemHeight * channels.length;
             }
             
-            // Görünür kanalı bul ve güncelle
             const visibleIndex = Math.floor((scrollTop + channelListElement.clientHeight / 2) / itemHeight) % channels.length;
             if (visibleIndex >= 0 && visibleIndex < channels.length) {
                 currentChannelIndex = visibleIndex;
@@ -893,10 +835,17 @@ function playChannel(index) {
         loadChannels();
 
         // Volume başlangıç
-        videoPlayer.volume = 1;
+        player.volume(1);
 
-        // Dokunmatik olayları engelle (TV için)
+        // Dokunmatik olayları engelle
         document.addEventListener('touchstart', (e) => e.preventDefault());
+
+        // PWA Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(e => console.log('SW kayıt hatası:', e));
+            });
+        }
     </script>
 </body>
 </html>
