@@ -586,7 +586,7 @@ function parseM3U(content) {
 // Cloudflare Proxy URL (kendi worker URL'inle değiştir)
 const PROXY_URL = 'https://proud-cake-0566.06mmt8129.workers.dev/';
 
-// Kanal oynat (Proxy'li versiyon)
+// Kanal oynat (düzeltilmiş versiyon)
 function playChannel(index) {
     if (index < 0) index = channels.length - 1;
     if (index >= channels.length) index = 0;
@@ -598,8 +598,13 @@ function playChannel(index) {
     hasError = false;
     errorMessage.classList.remove('active');
     
-    // Proxy URL'sini oluştur
-    const proxyUrl = `${PROXY_URL}/?url=${encodeURIComponent(channel.url)}`;
+    // URL'yi encode et (önemli!)
+    const encodedUrl = encodeURIComponent(channel.url);
+    const proxyUrl = `${PROXY_URL}/?url=${encodedUrl}`;
+    
+    console.log('Oynatılıyor:', channel.name);
+    console.log('Orjinal URL:', channel.url);
+    console.log('Proxy URL:', proxyUrl);
     
     // Video.js ile proxy üzerinden oynat
     player.src({
@@ -612,8 +617,8 @@ function playChannel(index) {
         showError();
     });
     
-    // Video olaylarını dinle
     player.one('playing', () => {
+        console.log('Oynatma başladı:', channel.name);
         if (!hasError && !listVisible) {
             setTimeout(() => {
                 if (!listVisible) {
@@ -625,6 +630,7 @@ function playChannel(index) {
     });
     
     player.one('error', () => {
+        console.error('Video hatası:', channel.name);
         showError();
     });
     
