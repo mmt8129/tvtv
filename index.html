@@ -587,8 +587,10 @@ function parseM3U(content) {
 const PROXY_URL = 'https://proud-cake-0566.06mmt8129.workers.dev/';
 
 // Kanal oynat (düzeltilmiş versiyon)
-// Worker'lı oynat (düzeltilmiş)
-function playChannel(index) {
+// Video.js'i geçici olarak devre dışı bırak
+// HTML'deki video elementini kullan (video.js olmadan)
+
+function playChannelNative(index) {
     if (index < 0) index = channels.length - 1;
     if (index >= channels.length) index = 0;
     
@@ -596,53 +598,40 @@ function playChannel(index) {
     const channel = channels[currentChannelIndex];
     
     showInfoModal(channel.name, true);
-    hasError = false;
-    errorMessage.classList.remove('active');
     
-    // Worker URL'si (KENDİNLE DEĞİŞTİR)
-    const WORKER_URL = 'https://cors-proxy.your-subdomain.workers.dev';
-    const encodedUrl = encodeURIComponent(channel.url);
-    const proxyUrl = `${WORKER_URL}/?url=${encodedUrl}`;
+    // Native HTML5 video elementini kullan
+    const video = document.getElementById('video-player');
     
-    console.log('Kanal:', channel.name);
-    console.log('Orjinal:', channel.url);
-    console.log('Proxy:', proxyUrl);
+    // Video.js'i geçici olarak kaldır
+    if (player) {
+        player.dispose();
+    }
     
-    // Proxy'yi dene
-    player.src({
-        src: proxyUrl,
-        type: getVideoType(channel.url)
+    video.src = channel.url;
+    video.load();
+    video.play().catch(e => {
+        console.error('Native oynatma hatası:', e);
+        showError();
     });
     
-    // Hata olursa direkt oynat
-    player.one('error', () => {
-        console.log('Proxy hatası, direkt oynatılıyor...');
-        player.src({
-            src: channel.url,
-            type: getVideoType(channel.url)
-        });
-        player.play().catch(e => {
-            console.error('Direkt oynatma da hata:', e);
-            showError();
-        });
-    });
+    video.onplaying = () => {
+        console.log('✅ Native player çalışıyor');
+        setTimeout(() => {
+            if (!listVisible) {
+                infoModal.classList.remove('active');
+                infoModalVisible = false;
+            }
+        }, 2000);
+    };
     
-    player.play().catch(e => {
-        console.error('Proxy oynatma hatası:', e);
-        // Error event zaten tetiklenecek
-    });
-    
-    player.one('playing', () => {
-        console.log('✅ Oynatma başladı');
-        if (!hasError && !listVisible) {
-            setTimeout(() => {
-                if (!listVisible) {
-                    infoModal.classList.remove('active');
-                    infoModalVisible = false;
-                }
-            }, 2000);
-        }
-    });
+    video.onerror = () => {
+        console.error('Native player hatası');
+        showError();
+    };
+}
+
+// Kullanmak için:
+// playChannelNative(0);
     
     updateSelectedChannel();
     if (!listVisible) {
