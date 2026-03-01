@@ -590,69 +590,71 @@
             channelListElement.scrollTop = targetScroll;
         }
 
-        // Kanal oynat (gelişmiş versiyon)
-        function playChannel(index) {
-            if (index < 0) index = channels.length - 1;
-            if (index >= channels.length) index = 0;
-            
-            currentChannelIndex = index;
-            const channel = channels[currentChannelIndex];
-            
-            showInfoModal(channel.name, true);
-            hasError = false;
-            errorMessage.classList.remove('active');
-            
-            // Video.js ile oynat
-            player.src({
-                src: channel.url,
-                type: getVideoType(channel.url)
-            });
-            
-            player.play().catch(e => {
-                console.error('Oynatma hatası:', e);
-                showError();
-            });
-            
-            // Video olaylarını dinle
-            player.one('playing', () => {
-                if (!hasError && !listVisible) {
-                    setTimeout(() => {
-                        if (!listVisible) {
-                            infoModal.classList.remove('active');
-                            infoModalVisible = false;
-                        }
-                    }, 2000);
-                }
-            });
-            
-            player.one('error', () => {
-                showError();
-            });
-            
-            player.one('waiting', () => {
-                showInfoModal(channel.name, true);
-            });
-            
-            updateSelectedChannel();
-            if (!listVisible) {
-                scrollToCurrentChannel();
-            }
-        }
+// Cloudflare Proxy URL (kendi worker URL'inle değiştir)
+const PROXY_URL = 'https://proud-cake-0566.06mmt8129.workers.dev/';
 
-        // Video tipini belirle
-        function getVideoType(url) {
-            if (url.includes('.m3u8')) {
-                return 'application/x-mpegURL';
-            } else if (url.includes('.mpd')) {
-                return 'application/dash+xml';
-            } else if (url.includes('.mp4')) {
-                return 'video/mp4';
-            } else if (url.includes('.ts')) {
-                return 'video/MP2T';
-            } else {
-                return 'video/mp4';
-            }
+// Kanal oynat (Proxy'li versiyon)
+function playChannel(index) {
+    if (index < 0) index = channels.length - 1;
+    if (index >= channels.length) index = 0;
+    
+    currentChannelIndex = index;
+    const channel = channels[currentChannelIndex];
+    
+    showInfoModal(channel.name, true);
+    hasError = false;
+    errorMessage.classList.remove('active');
+    
+    // Proxy URL'sini oluştur
+    const proxyUrl = `${PROXY_URL}/?url=${encodeURIComponent(channel.url)}`;
+    
+    // Video.js ile proxy üzerinden oynat
+    player.src({
+        src: proxyUrl,
+        type: getVideoType(channel.url)
+    });
+    
+    player.play().catch(e => {
+        console.error('Oynatma hatası:', e);
+        showError();
+    });
+    
+    // Video olaylarını dinle
+    player.one('playing', () => {
+        if (!hasError && !listVisible) {
+            setTimeout(() => {
+                if (!listVisible) {
+                    infoModal.classList.remove('active');
+                    infoModalVisible = false;
+                }
+            }, 2000);
         }
+    });
+    
+    player.one('error', () => {
+        showError();
+    });
+    
+    updateSelectedChannel();
+    if (!listVisible) {
+        scrollToCurrentChannel();
+    }
+}
+
+// Video tipini belirle (aynı kalabilir)
+function getVideoType(url) {
+    if (url.includes('.m3u8')) {
+        return 'application/x-mpegURL';
+    } else if (url.includes('.mpd')) {
+        return 'application/dash+xml';
+    } else if (url.includes('.mp4')) {
+        return 'video/mp4';
+    } else if (url.includes('.ts')) {
+        return 'video/MP2T';
+    } else {
+        return 'video/mp4';
+    }
+}
 
         // Bilgi modalını göster
         function showInfoModal(channelName, showBuffer = true) {
