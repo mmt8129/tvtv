@@ -1,835 +1,253 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TV Box M3U Oynatıcı</title>
-    <meta name="theme-color" content="#000000">
-    <link rel="manifest" href="manifest.json">
-    
-    <!-- Güvenlik politikasını gevşet -->
-    <meta http-equiv="Content-Security-Policy" content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * self 'unsafe-inline' 'unsafe-eval' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
-    
-    <!-- HLS.js ve Video.js kütüphaneleri -->
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/video.js@7.21.5/dist/video.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/video.js@7.21.5/dist/video-js.min.css" rel="stylesheet">
-    
-    <style>
-        /* Aynı CSS stilleri buraya gelecek (önceki kodla aynı) */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-        }
+<meta charset="UTF-8" />
+<title>TV Box M3U Oynatıcı</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: black;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #000;
-            color: #fff;
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
-            position: fixed;
-        }
+  #videoContainer {
+    position: fixed;
+    top:0; left:0; right:0; bottom:0;
+  }
+  video {
+    width: 100%;
+    height: 100%;
+  }
 
-        /* Splash Screen */
-        #splash-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease;
-        }
+#channelList {
+  position: fixed;
+  top: 50px;
+  left: 10px;
+  width: 250px;
+  max-height: 400px;
+  overflow-y: auto;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  padding: 10px;
+  display: none;
+  border-radius: 8px;
+  z-index: 999;
+}
 
-        #splash-screen.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
+#channelList.show {
+  display: block;
+  transition: opacity 0.5s;
+  opacity: 1;
+}
 
-        .tv-logo {
-            width: 200px;
-            height: 200px;
-            background: linear-gradient(135deg, #ff4d4d, #cc0000);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 30px rgba(255, 77, 77, 0.5);
-            animation: pulse 1.5s ease-in-out infinite;
-        }
+#channelInfo {
+  position: fixed;
+  bottom: 50px;
+  width: 100%;
+  text-align: center;
+  font-size: 24px;
+  color: white;
+  display: none;
+  z-index: 998;
+}
 
-        .tv-logo span {
-            font-size: 80px;
-            font-weight: bold;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
+#loading {
+  position: fixed;
+  bottom: 120px;
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+  color: white;
+  display: none;
+  z-index: 998;
+}
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
+#volumeIndicator {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 30px;
+  height: 200px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 10px;
+  overflow: hidden;
+  display: none;
+}
 
-        /* Video Player */
-        #video-player {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background: #000;
-            z-index: 1;
-        }
+#volumeLevel {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 50%;
+  background: lime;
+}
 
-        /* Saat */
-        #clock {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            color: #fff;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 32px;
-            font-weight: bold;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            z-index: 2;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            letter-spacing: 2px;
-        }
-
-        /* Alt Bilgi Modalı */
-        #info-modal {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            color: white;
-            padding: 20px 40px;
-            border-radius: 12px;
-            font-size: 28px;
-            z-index: 3;
-            display: none;
-            align-items: center;
-            gap: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-            min-width: 400px;
-            justify-content: center;
-        }
-
-        #info-modal.active {
-            display: flex;
-        }
-
-        #channel-name {
-            font-weight: 500;
-        }
-
-        #buffer-indicator {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: #ffaa00;
-        }
-
-        .loading-dots {
-            display: inline-flex;
-            gap: 4px;
-            margin-left: 5px;
-        }
-
-        .loading-dots span {
-            width: 8px;
-            height: 8px;
-            background: #ffaa00;
-            border-radius: 50%;
-            animation: loadingDot 1.4s infinite;
-            opacity: 0;
-        }
-
-        .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
-        .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
-        .loading-dots span:nth-child(4) { animation-delay: 0.6s; }
-        .loading-dots span:nth-child(5) { animation-delay: 0.8s; }
-        .loading-dots span:nth-child(6) { animation-delay: 1.0s; }
-        .loading-dots span:nth-child(7) { animation-delay: 1.2s; }
-        .loading-dots span:nth-child(8) { animation-delay: 1.4s; }
-
-        @keyframes loadingDot {
-            0%, 100% { opacity: 0; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
-
-        #error-message {
-            color: #ff4444;
-            font-weight: bold;
-            display: none;
-        }
-
-        #error-message.active {
-            display: inline;
-        }
-
-        /* Ses Barı */
-        #volume-bar-container {
-            position: fixed;
-            right: 30px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 60px;
-            height: 300px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            border-radius: 30px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            z-index: 4;
-            display: none;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 10px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-        }
-
-        #volume-bar-container.active {
-            display: flex;
-        }
-
-        #volume-level {
-            width: 100%;
-            background: linear-gradient(to top, #4CAF50, #8BC34A);
-            border-radius: 20px;
-            transition: height 0.2s ease;
-            position: relative;
-        }
-
-        #volume-text {
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-            text-shadow: 1px 1px 2px black;
-        }
-
-        /* Kanal Listesi */
-        #channel-list-container {
-            position: fixed;
-            top: 0;
-            left: -33.33%;
-            width: 33.33%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            z-index: 5;
-            transition: left 0.3s ease;
-            border-right: 2px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-
-        #channel-list-container.active {
-            left: 0;
-        }
-
-        #channel-list {
-            height: 100%;
-            overflow-y: scroll;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            padding: 0 15px;
-            position: relative;
-        }
-
-        #channel-list::-webkit-scrollbar {
-            display: none;
-        }
-
-        .channel-item {
-            height: 70px;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            margin: 10px 0;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid transparent;
-            transition: all 0.2s ease;
-            font-size: 24px;
-            position: relative;
-            transform: perspective(500px) rotateX(0deg);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .channel-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: 12px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
-            pointer-events: none;
-        }
-
-        .channel-number {
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: 20px;
-            font-weight: bold;
-            font-size: 28px;
-            color: #ffaa00;
-            border: 1px solid rgba(255, 170, 0, 0.3);
-        }
-
-        .channel-name-text {
-            flex: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-size: 26px;
-            font-weight: 500;
-        }
-
-        .channel-item.selected {
-            background: rgba(255, 170, 0, 0.3);
-            border: 2px solid #ffaa00;
-            transform: perspective(500px) rotateX(2deg) scale(1.02);
-            box-shadow: 0 10px 20px rgba(255, 170, 0, 0.3);
-        }
-
-        .channel-item.selected .channel-number {
-            background: #ffaa00;
-            color: #000;
-            font-weight: bold;
-            box-shadow: 0 0 15px #ffaa00;
-        }
-
-        /* İşaretçi (sabit ortada) */
-        #list-pointer {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 70px;
-            transform: translateY(-50%);
-            border: 3px solid #ffaa00;
-            border-radius: 15px;
-            pointer-events: none;
-            z-index: 6;
-            box-shadow: 0 0 20px rgba(255, 170, 0, 0.5);
-            margin: 0 15px;
-        }
-
-        /* Liste ayracı */
-        .list-separator {
-            height: 4px;
-            background: linear-gradient(90deg, transparent, #ffaa00, #ff4444, #ffaa00, transparent);
-            margin: 20px 0;
-            width: 100%;
-            box-shadow: 0 0 15px #ffaa00;
-        }
-
-        /* Geri sayım zamanlayıcısı */
-        #list-timer {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 3px solid #ffaa00;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            color: #ffaa00;
-            z-index: 7;
-        }
-
-        #list-timer.active {
-            display: flex;
-        }
-    </style>
+</style>
 </head>
 <body>
-    <!-- Splash Screen -->
-    <div id="splash-screen">
-        <div class="tv-logo">
-            <span>TV</span>
-        </div>
-    </div>
 
-    <!-- Video Player (Video.js ile güçlendirilmiş) -->
-    <video id="video-player" class="video-js vjs-default-skin vjs-big-play-centered" controls autoplay playsinline preload="auto"></video>
+<div id="videoContainer">
+  <video id="videoPlayer" autoplay muted playsinline></video>
+</div>
 
-    <!-- Dijital Saat -->
-    <div id="clock">20:45</div>
+<div id="channelList"></div>
+<div id="channelInfo"></div>
+<div id="loading">Buffering...</div>
+<div id="volumeIndicator"><div id="volumeLevel"></div></div>
 
-    <!-- Alt Bilgi Modalı -->
-    <div id="info-modal">
-        <span id="channel-name">Kanal Adı</span>
-        <div id="buffer-indicator">
-            <span>Yükleniyor</span>
-            <div class="loading-dots">
-                <span></span><span></span><span></span><span></span>
-                <span></span><span></span><span></span><span></span>
-            </div>
-        </div>
-        <span id="error-message">Oynatılamadı</span>
-    </div>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script>
+const video = document.getElementById('videoPlayer');
+const channelListDiv = document.getElementById('channelList');
+const channelInfoDiv = document.getElementById('channelInfo');
+const loadingDiv = document.getElementById('loading');
+const volumeIndicator = document.getElementById('volumeIndicator');
+const volumeLevel = document.getElementById('volumeLevel');
 
-    <!-- Ses Barı -->
-    <div id="volume-bar-container">
-        <div id="volume-level" style="height: 100%">
-            <span id="volume-text">100</span>
-        </div>
-    </div>
+let channels = [];
+let currentChannelIndex = 0;
+let showChannelListTimeout = null;
+let volume = 50;
 
-    <!-- Kanal Listesi -->
-    <div id="channel-list-container">
-        <div id="channel-list"></div>
-        <div id="list-pointer"></div>
-        <div id="list-timer">3</div>
-    </div>
+const m3uUrl = '1.m3u';
+let hls = null;
 
-    <script>
-        // Video.js player'ı başlat
-        const player = videojs('video-player', {
-            html5: {
-                hls: {
-                    enableLowInitialPlaylist: true,
-                    smoothQualityChange: true,
-                    overrideNative: true
-                }
-            },
-            liveui: true,
-            responsive: true,
-            fluid: true,
-            controls: false,
-            autoplay: true,
-            preload: 'auto'
-        });
+fetch(m3uUrl)
+.then(res => res.text())
+.then(parseM3U)
+.then(() => {
+  if(channels.length > 0){
+    loadChannel(currentChannelIndex);
+  }
+});
 
-        // Uygulama durumu
-        let channels = [];
-        let currentChannelIndex = 0;
-        let currentVolume = 100;
-        let listVisible = false;
-        let infoModalVisible = true;
-        let volumeBarVisible = false;
-        let listTimer = null;
-        let volumeTimer = null;
-        let infoTimer = null;
-        let hasError = false;
-
-        // DOM elementleri
-        const clockElement = document.getElementById('clock');
-        const channelListContainer = document.getElementById('channel-list-container');
-        const channelListElement = document.getElementById('channel-list');
-        const infoModal = document.getElementById('info-modal');
-        const channelNameElement = document.getElementById('channel-name');
-        const bufferIndicator = document.getElementById('buffer-indicator');
-        const errorMessage = document.getElementById('error-message');
-        const volumeBarContainer = document.getElementById('volume-bar-container');
-        const volumeLevel = document.getElementById('volume-level');
-        const volumeText = document.getElementById('volume-text');
-        const listTimerElement = document.getElementById('list-timer');
-        const splashScreen = document.getElementById('splash-screen');
-
-        // Saat güncelleme
-        function updateClock() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            clockElement.textContent = `${hours}:${minutes}`;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        // M3U dosyasını yükle
-        async function loadChannels() {
-            try {
-                const response = await fetch('1.m3u');
-                const text = await response.text();
-                parseM3U(text);
-            } catch (error) {
-                console.error('M3U yüklenemedi, örnek kanallar kullanılıyor:', error);
-                // Test kanalları (çalışan örnekler)
-                channels = [
-                    { name: 'Big Buck Bunny (Test)', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
-                    { name: 'Sintel (Test)', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4' },
-                    { name: 'Test HLS', url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8' }
-                ];
-                renderChannelList();
-                playChannel(0);
-            }
-        }
-
-        // M3U ayrıştırıcı
-        // M3U ayrıştırıcı (proxy'li)
-function parseM3U(content) {
-    const lines = content.split('\n');
-    channels = [];
-    const PROXY_URL = 'https://cors-proxy.your-subdomain.workers.dev';
-    
-    for (let i = 0; i < lines.length; i++) {
-        if (lines[i].startsWith('#EXTINF:')) {
-            let name = lines[i].split(',')[1] || 'Kanal ' + (channels.length + 1);
-            name = name.replace(/group-title="[^"]*"/g, '').trim();
-            
-            let url = '';
-            for (let j = i + 1; j < lines.length; j++) {
-                if (lines[j].trim() && !lines[j].startsWith('#')) {
-                    url = lines[j].trim();
-                    break;
-                }
-            }
-            
-            if (url) {
-                // URL'yi proxy'den geçir
-                const proxyUrl = `${PROXY_URL}/?url=${encodeURIComponent(url)}`;
-                channels.push({ name, url: proxyUrl, originalUrl: url });
-            }
-        }
+function parseM3U(data) {
+  channels = [];
+  const lines = data.split('\n').map(l => l.trim()).filter(l => l);
+  let currentUrl = '';
+  let currentName = '';
+  for(let i=0; i<lines.length; i++) {
+    if(lines[i].startsWith('#EXTINF')) {
+      const match = lines[i].match(/#EXTINF.*?,(.*)$/);
+      if(match) currentName = match[1];
+    } else if(lines[i].startsWith('http') || lines[i].startsWith('/')) {
+      currentUrl = lines[i];
+      channels.push({name: currentName, url: currentUrl});
     }
-    
-    renderChannelList();
-    playChannel(0);
+  }
+  populateChannelList();
 }
-        // Kanal listesini render et
-        function renderChannelList() {
-            if (!channelListElement) return;
-            
-            let html = '';
-            
-            // Sonsuz döngü için başa eklenen kanallar
-            for (let i = channels.length - 1; i >= 0; i--) {
-                html += createChannelItemHTML(i, channels[i]);
-            }
-            
-            // Ayraç
-            html += '<div class="list-separator"></div>';
-            
-            // Asıl kanallar
-            for (let i = 0; i < channels.length; i++) {
-                html += createChannelItemHTML(i, channels[i]);
-            }
-            
-            // Ayraç
-            html += '<div class="list-separator"></div>';
-            
-            // Sona eklenen kanallar
-            for (let i = 0; i < channels.length; i++) {
-                html += createChannelItemHTML(i, channels[i]);
-            }
-            
-            channelListElement.innerHTML = html;
-            updateSelectedChannel();
-            scrollToCurrentChannel();
-        }
 
-        function createChannelItemHTML(index, channel) {
-            return `
-                <div class="channel-item" data-index="${index}">
-                    <div class="channel-number">${index + 1}</div>
-                    <div class="channel-name-text">${channel.name}</div>
-                </div>
-            `;
-        }
+function populateChannelList() {
+  channelListDiv.innerHTML = '';
+  channels.forEach((ch, idx) => {
+    const item = document.createElement('div');
+    item.textContent = ch.name;
+    item.style.padding = '5px';
+    item.style.cursor = 'pointer';
+    item.onclick = () => {
+      loadChannel(idx);
+    };
+    channelListDiv.appendChild(item);
+  });
+}
 
-        // Seçili kanalı güncelle
-        function updateSelectedChannel() {
-            document.querySelectorAll('.channel-item').forEach(item => {
-                item.classList.remove('selected');
-            });
-            
-            const items = document.querySelectorAll('.channel-item');
-            const midIndex = Math.floor(items.length / 2) + (currentChannelIndex - Math.floor(channels.length / 2));
-            
-            if (items[midIndex]) {
-                items[midIndex].classList.add('selected');
-            }
-        }
+function showChannelList() {
+  channelListDiv.classList.add('show');
+  if(showChannelListTimeout) clearTimeout(showChannelListTimeout);
+  showChannelListTimeout = setTimeout(() => {
+    channelListDiv.classList.remove('show');
+  }, 3000);
+}
 
-        // Liste pozisyonunu ayarla
-        function scrollToCurrentChannel() {
-            const items = document.querySelectorAll('.channel-item');
-            if (items.length === 0) return;
-            
-            const itemHeight = 90;
-            const targetScroll = (currentChannelIndex + channels.length) * itemHeight - (channelListElement.clientHeight / 2) + (itemHeight / 2);
-            
-            channelListElement.scrollTop = targetScroll;
-        }
+function loadChannel(index) {
+  currentChannelIndex = index;
+  const ch = channels[index];
+  showLoading();
 
-// Cloudflare Proxy URL (KENDİ WORKER URL'İNLE DEĞİŞTİR!)
-const PROXY_URL = 'https://proud-cake-0566.06mmt8129.workers.dev/';
-
-// Kanal oynat (düzeltilmiş versiyon)
-// Video.js'i geçici olarak devre dışı bırak
-// HTML'deki video elementini kullan (video.js olmadan)
-
-function playChannelNative(index) {
-    if (index < 0) index = channels.length - 1;
-    if (index >= channels.length) index = 0;
-    
-    currentChannelIndex = index;
-    const channel = channels[currentChannelIndex];
-    
-    showInfoModal(channel.name, true);
-    
-    // Native HTML5 video elementini kullan
-    const video = document.getElementById('video-player');
-    
-    // Video.js'i geçici olarak kaldır
-    if (player) {
-        player.dispose();
+  if (Hls.isSupported()) {
+    if (hls) {
+      hls.destroy();
     }
-    
-    video.src = channel.url;
-    video.load();
-    video.play().catch(e => {
-        console.error('Native oynatma hatası:', e);
-        showError();
+    hls = new Hls();
+    hls.loadSource(ch.url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+      hideLoading();
+      video.play();
+      showChannelInfo(ch.name);
     });
-    
-    video.onplaying = () => {
-        console.log('✅ Native player çalışıyor');
-        setTimeout(() => {
-            if (!listVisible) {
-                infoModal.classList.remove('active');
-                infoModalVisible = false;
-            }
-        }, 2000);
-    };
-    
-    video.onerror = () => {
-        console.error('Native player hatası');
-        showError();
-    };
+    hls.on(Hls.Events.ERROR, function (event, data) {
+      console.warn('HLS Error: ', data);
+      hideLoading();
+      showChannelInfo('Kanal Yüklenemedi');
+    });
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = ch.url;
+    video.addEventListener('loadedmetadata', () => {
+      hideLoading();
+      video.play();
+      showChannelInfo(ch.name);
+    });
+    video.addEventListener('error', () => {
+      hideLoading();
+      showChannelInfo('Kanal Yüklenemedi');
+    });
+  } else {
+    console.error('HLS is not supported on this browser.');
+    hideLoading();
+    showChannelInfo('HLS Desteklenmiyor');
+  }
 }
 
-// Kullanmak için:
-// playChannelNative(0);
-    
-    updateSelectedChannel();
-    if (!listVisible) {
-        scrollToCurrentChannel();
-    }
+function showLoading() {
+  loadingDiv.style.display = 'block';
 }
-        // Bilgi modalını göster
-        function showInfoModal(channelName, showBuffer = true) {
-            channelNameElement.textContent = channelName;
-            
-            if (showBuffer) {
-                bufferIndicator.style.display = 'flex';
-                errorMessage.classList.remove('active');
-            }
-            
-            infoModal.classList.add('active');
-            infoModalVisible = true;
-            
-            if (infoTimer) clearTimeout(infoTimer);
-            infoTimer = setTimeout(() => {
-                if (!hasError && !listVisible) {
-                    infoModal.classList.remove('active');
-                    infoModalVisible = false;
-                }
-            }, 2000);
-        }
 
-        // Hata göster
-        function showError() {
-            hasError = true;
-            bufferIndicator.style.display = 'none';
-            errorMessage.classList.add('active');
-        }
+function hideLoading() {
+  loadingDiv.style.display = 'none';
+}
 
-        // Ses seviyesini ayarla
-        function setVolume(change) {
-            currentVolume = Math.max(0, Math.min(100, currentVolume + change));
-            player.volume(currentVolume / 100);
-            
-            volumeBarContainer.classList.add('active');
-            volumeLevel.style.height = currentVolume + '%';
-            volumeText.textContent = currentVolume;
-            
-            if (volumeTimer) clearTimeout(volumeTimer);
-            volumeTimer = setTimeout(() => {
-                volumeBarContainer.classList.remove('active');
-            }, 2000);
-        }
+function showChannelInfo(name) {
+  channelInfoDiv.textContent = name;
+  channelInfoDiv.style.display = 'block';
+  setTimeout(() => {
+    channelInfoDiv.style.display = 'none';
+  }, 2000);
+}
 
-        // Listeyi aç/kapat
-        function toggleList(show) {
-            if (show) {
-                channelListContainer.classList.add('active');
-                listVisible = true;
-                scrollToCurrentChannel();
-                
-                let counter = 3;
-                listTimerElement.classList.add('active');
-                listTimerElement.textContent = counter;
-                
-                if (listTimer) clearInterval(listTimer);
-                listTimer = setInterval(() => {
-                    counter--;
-                    listTimerElement.textContent = counter;
-                    
-                    if (counter <= 0) {
-                        clearInterval(listTimer);
-                        toggleList(false);
-                    }
-                }, 1000);
-            } else {
-                channelListContainer.classList.remove('active');
-                listVisible = false;
-                listTimerElement.classList.remove('active');
-                if (listTimer) {
-                    clearInterval(listTimer);
-                    listTimer = null;
-                }
-            }
-        }
+document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
 
-        // Tuş olaylarını dinle
-        document.addEventListener('keydown', (e) => {
-            const key = e.key;
-            
-            switch (key) {
-                case 'ArrowUp':
-                    e.preventDefault();
-                    if (listVisible) {
-                        channelListElement.scrollTop -= 90;
-                        const items = document.querySelectorAll('.channel-item');
-                        const visibleIndex = Math.floor((channelListElement.scrollTop + channelListElement.clientHeight / 2) / 90) - Math.floor(channels.length / 2);
-                        if (visibleIndex >= 0 && visibleIndex < channels.length) {
-                            currentChannelIndex = visibleIndex;
-                            updateSelectedChannel();
-                        }
-                    } else {
-                        playChannel(currentChannelIndex - 1);
-                    }
-                    break;
-                    
-                case 'ArrowDown':
-                    e.preventDefault();
-                    if (listVisible) {
-                        channelListElement.scrollTop += 90;
-                        const items = document.querySelectorAll('.channel-item');
-                        const visibleIndex = Math.floor((channelListElement.scrollTop + channelListElement.clientHeight / 2) / 90) - Math.floor(channels.length / 2);
-                        if (visibleIndex >= 0 && visibleIndex < channels.length) {
-                            currentChannelIndex = visibleIndex;
-                            updateSelectedChannel();
-                        }
-                    } else {
-                        playChannel(currentChannelIndex + 1);
-                    }
-                    break;
-                    
-                case 'ArrowRight':
-                    e.preventDefault();
-                    if (listVisible) {
-                        playChannel(currentChannelIndex);
-                        toggleList(false);
-                    } else {
-                        setVolume(50);
-                    }
-                    break;
-                    
-                case 'ArrowLeft':
-                    e.preventDefault();
-                    if (!listVisible) {
-                        setVolume(-50);
-                    }
-                    break;
-                    
-                case 'Enter':
-                case 'OK':
-                    e.preventDefault();
-                    if (!listVisible) {
-                        toggleList(true);
-                    }
-                    break;
-                    
-                case 'Backspace':
-                case 'Escape':
-                    e.preventDefault();
-                    if (listVisible) {
-                        toggleList(false);
-                    } else if (infoModalVisible) {
-                        infoModal.classList.remove('active');
-                        infoModalVisible = false;
-                    }
-                    break;
-            }
-        });
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'ArrowLeft') {
+    loadChannel((currentChannelIndex - 1 + channels.length) % channels.length);
+  } else if(e.key === 'ArrowRight') {
+    loadChannel((currentChannelIndex + 1) % channels.length);
+  } else if(e.key === 'ArrowUp') {
+    volume = Math.min(100, volume + 5);
+    updateVolume();
+  } else if(e.key === 'ArrowDown') {
+    volume = Math.max(0, volume - 5);
+    updateVolume();
+  } else if(e.key === 'Menu' || e.key === 'm') {
+    showChannelList();
+  }
+});
 
-        // Liste kaydırma olayı
-        channelListElement.addEventListener('scroll', () => {
-            if (!listVisible) return;
-            
-            const items = document.querySelectorAll('.channel-item');
-            const itemHeight = 90;
-            const totalHeight = items.length * itemHeight;
-            const scrollTop = channelListElement.scrollTop;
-            
-            if (scrollTop < itemHeight * channels.length) {
-                channelListElement.scrollTop = scrollTop + itemHeight * channels.length;
-            }
-            
-            if (scrollTop > totalHeight - itemHeight * channels.length * 2) {
-                channelListElement.scrollTop = scrollTop - itemHeight * channels.length;
-            }
-            
-            const visibleIndex = Math.floor((scrollTop + channelListElement.clientHeight / 2) / itemHeight) % channels.length;
-            if (visibleIndex >= 0 && visibleIndex < channels.length) {
-                currentChannelIndex = visibleIndex;
-                updateSelectedChannel();
-            }
-        });
+let volumeTimeout;
+function updateVolume() {
+  video.volume = volume/100;
+  volumeLevel.style.height = volume + '%';
+  volumeIndicator.style.display = 'block';
+  if(volumeTimeout) clearTimeout(volumeTimeout);
+  volumeTimeout = setTimeout(() => {
+    volumeIndicator.style.display='none';
+  }, 3000);
+}
+</script>
 
-        // Splash screen'i 2 saniye sonra kaldır
-        setTimeout(() => {
-            splashScreen.classList.add('hidden');
-        }, 2000);
-
-        // Uygulamayı başlat
-        loadChannels();
-
-        // Volume başlangıç
-        player.volume(1);
-
-        // Dokunmatik olayları engelle
-        document.addEventListener('touchstart', (e) => e.preventDefault());
-
-        // PWA Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').catch(e => console.log('SW kayıt hatası:', e));
-            });
-        }
-    </script>
 </body>
 </html>
