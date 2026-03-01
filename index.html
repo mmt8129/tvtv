@@ -90,17 +90,25 @@ fetch(playlistUrl)
 function parseM3U(data) {
   channels = [];
   const lines = data.split(/\r?\n/);
-  let currentName = 'Kanal'; // varsayılan isim
-  for(let i=0; i<lines.length; i++) {
-    if(lines[i].startsWith('#EXTINF')) {
-      const match = lines[i].match(/#EXTINF:-?\d*,([^,[i)$/);
-      if(match) currentName = match[1].trim();
-    } else if(lines[i].startsWith('http') || lines[i].startsWith('/')) {
-      channels.push({name: currentName, url: lines[i].trim()});
-      currentName=''; // sonra gelenEXTINF satırını alır
+  let currentName = '';
+  for(let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if(line.startsWith('#EXTINF')) {
+      // Kanal adını çıkart
+      const match = line.match(/#EXTINF:-?\d+,(.+)/);
+      if(match) {
+        currentName = match[1].trim();
+      } else {
+        currentName = 'İsimsiz Kanal';
+      }
+    } else if(line && !line.startsWith('#')) {
+      // Bu satır URL olmalı
+      channels.push({name: currentName || 'İsimsiz Kanal', url: line});
+      currentName = '';
     }
   }
 }
+
 
 function showChannelList() {
   channelListDiv.style.display = 'block';
