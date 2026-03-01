@@ -583,8 +583,8 @@ function parseM3U(content) {
             channelListElement.scrollTop = targetScroll;
         }
 
-// Cloudflare Proxy URL (kendi worker URL'inle değiştir)
-const PROXY_URL = 'https://proud-cake-0566.06mmt8129.workers.dev/';
+// Cloudflare Proxy URL (KENDİ WORKER URL'İNLE DEĞİŞTİR!)
+const PROXY_URL = 'https://cors-proxy.your-subdomain.workers.dev';
 
 // Kanal oynat (düzeltilmiş versiyon)
 function playChannel(index) {
@@ -598,27 +598,47 @@ function playChannel(index) {
     hasError = false;
     errorMessage.classList.remove('active');
     
-    // URL'yi encode et (önemli!)
+    // URL'yi encode et
     const encodedUrl = encodeURIComponent(channel.url);
-    const proxyUrl = `${PROXY_URL}/?url=${encodedUrl}`;
     
-    console.log('Oynatılıyor:', channel.name);
+    // İKİ FARKLI FORMAT DENE:
+    // Format 1: Query string parametresi olarak
+    const proxyUrl1 = `${PROXY_URL}/?url=${encodedUrl}`;
+    
+    // Format 2: Path olarak (worker'daki /proxy/ formatını kullan)
+    const proxyUrl2 = `${PROXY_URL}/proxy/${encodedUrl}`;
+    
+    console.log('Kanal:', channel.name);
     console.log('Orjinal URL:', channel.url);
-    console.log('Proxy URL:', proxyUrl);
+    console.log('Proxy URL (query):', proxyUrl1);
+    console.log('Proxy URL (path):', proxyUrl2);
     
-    // Video.js ile proxy üzerinden oynat
+    // Önce query string formatını dene
     player.src({
-        src: proxyUrl,
+        src: proxyUrl1,
         type: getVideoType(channel.url)
+    });
+    
+    // Eğer query string çalışmazsa path formatını dene
+    player.one('error', () => {
+        console.log('Query string hatası, path formatı deneniyor...');
+        player.src({
+            src: proxyUrl2,
+            type: getVideoType(channel.url)
+        });
+        player.play().catch(e => {
+            console.error('Path formatı da hata verdi:', e);
+            showError();
+        });
     });
     
     player.play().catch(e => {
         console.error('Oynatma hatası:', e);
-        showError();
+        // Hata zaten error event'i ile yakalanacak
     });
     
     player.one('playing', () => {
-        console.log('Oynatma başladı:', channel.name);
+        console.log('✅ Oynatma başladı:', channel.name);
         if (!hasError && !listVisible) {
             setTimeout(() => {
                 if (!listVisible) {
@@ -627,11 +647,6 @@ function playChannel(index) {
                 }
             }, 2000);
         }
-    });
-    
-    player.one('error', () => {
-        console.error('Video hatası:', channel.name);
-        showError();
     });
     
     updateSelectedChannel();
