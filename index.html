@@ -404,6 +404,29 @@
     </div>
 
     <script>
+
+// PWA için Service Worker'ı kaydet
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+            .then(registration => {
+                console.log('ServiceWorker başarıyla kaydedildi:', registration.scope);
+                
+                // Periyodik senkronizasyonu kontrol et
+                if ('periodicSync' in registration) {
+                    registration.periodicSync.register('clean-cache', {
+                        minInterval: 30 * 24 * 60 * 60 * 1000 // 30 gün
+                    }).catch(e => console.log('Periodic sync desteklenmiyor:', e));
+                }
+            })
+            .catch(error => {
+                console.log('ServiceWorker kayıt hatası:', error);
+            });
+    });
+}
+
+
+        
         // Uygulama durumu
         let channels = [];
         let currentChannelIndex = 0;
