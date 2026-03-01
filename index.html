@@ -6,6 +6,7 @@
     <title>TV Box M3U Oynatıcı</title>
     <meta name="theme-color" content="#000000">
     <link rel="manifest" href="manifest.json">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         * {
             margin: 0;
@@ -601,38 +602,71 @@ if ('serviceWorker' in navigator) {
             channelListElement.scrollTop = targetScroll;
         }
 
-        // Kanal oynat
-        function playChannel(index) {
-            if (index < 0) index = channels.length - 1;
-            if (index >= channels.length) index = 0;
-            
-            currentChannelIndex = index;
-            const channel = channels[currentChannelIndex];
-            
-            // Bilgi modalını göster
-            showInfoModal(channel.name, true);
-            
-            // Hata mesajını gizle
-            hasError = false;
-            errorMessage.classList.remove('active');
-            
-            // Video kaynağını değiştir
-            videoPlayer.src = channel.url;
-            videoPlayer.load();
-            videoPlayer.play().catch(e => {
-                console.error('Oynatma hatası:', e);
-                showError();
+       // Kanal oynat (HLS.js destekli)
+function playChannel(index) {
+    if (index < 0) index = channels.length - 1;
+    if (index >= channels.length) index = 0;
+    
+    currentChannelIndex = index;
+    const channel = channels[currentChannelIndex];
+    
+    showInfoModal(channel.name, true);
+    hasError = false;
+    errorMessage.classList.remove('active');
+    
+    // HLS.js kontrolü
+    if (channel.url.includes('.m3u8')) {
+        if (Hls.isSupported()) {
+            const hls = new Hls({
+                debug: false,
+                enableWorker: true,
+                lowLatencyMode: true,
+                backBufferLength: 90
             });
             
-            // Seçili kanalı güncelle
-            updateSelectedChannel();
-            
-            // Liste açık değilse pozisyonu güncelle
-            if (!listVisible) {
-                scrollToCurrentChannel();
+            // Önceki HLS instance'ını temizle
+            if (window.currentHls) {
+                window.currentHls.destroy();
             }
+            
+            hls.loadSource(channel.url);
+            hls.attachMedia(videoPlayer);
+            
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                videoPlayer.play().catch(e => {
+                    console.log('Otomatik oynatma engellendi:', e);
+                    showError();
+                });
+            });
+            
+            hls.on(Hls.Events.ERROR, (event, data) => {
+                if (data.fatal) {
+                    console.error('HLS hatası:', data);
+                    showError();
+                }
+            });
+            
+            window.currentHls = hls;
+        } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+            // Safari için native HLS desteği
+            videoPlayer.src = channel.url;
+            videoPlayer.load();
+            videoPlayer.play().catch(showError);
+        } else {
+            showError();
         }
-
+    } else {
+        // Normal video dosyaları için (MP4, TS, vs)
+        videoPlayer.src = channel.url;
+        videoPlayer.load();
+        videoPlayer.play().catch(showError);
+    }
+    
+    updateSelectedChannel();
+    if (!listVisible) {
+        scrollToCurrentChannel();
+    }
+}
         // Bilgi modalını göster
         function showInfoModal(channelName, showBuffer = true) {
             channelNameElement.textContent = channelName;
