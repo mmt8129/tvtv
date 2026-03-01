@@ -5,86 +5,88 @@
 <title>TV Box M3U Oynatıcı</title>
 <style>
   html, body {
-    margin: 0;
-    padding: 0;
+    margin: 0; padding: 0;
     background: black;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+    width: 100%; height: 100%; overflow: hidden;
+    font-family: Arial, sans-serif;
   }
-
   #videoContainer {
-    position: fixed;
-    top:0; left:0; right:0; bottom:0;
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
   }
   video {
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
+    background: black;
   }
-
-#channelList {
-  position: fixed;
-  top: 50px;
-  left: 10px;
-  width: 250px;
-  max-height: 400px;
-  overflow-y: auto;
-  background: rgba(0,0,0,0.7);
-  color: white;
-  padding: 10px;
-  display: none;
-  border-radius: 8px;
-  z-index: 999;
-}
-
-#channelList.show {
-  display: block;
-  transition: opacity 0.5s;
-  opacity: 1;
-}
-
-#channelInfo {
-  position: fixed;
-  bottom: 50px;
-  width: 100%;
-  text-align: center;
-  font-size: 24px;
-  color: white;
-  display: none;
-  z-index: 998;
-}
-
-#loading {
-  position: fixed;
-  bottom: 120px;
-  width: 100%;
-  text-align: center;
-  font-size: 20px;
-  color: white;
-  display: none;
-  z-index: 998;
-}
-
-#volumeIndicator {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  width: 30px;
-  height: 200px;
-  background: rgba(255,255,255,0.2);
-  border-radius: 10px;
-  overflow: hidden;
-  display: none;
-}
-
-#volumeLevel {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 50%;
-  background: lime;
-}
-
+  #channelList {
+    position: fixed;
+    top: 50px;
+    left: 10px;
+    width: 280px;
+    max-height: 400px;
+    overflow-y: auto;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    z-index: 10000;
+    display: block; /* başta görünür */
+  }
+  #channelList div {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    margin-bottom: 2px;
+    transition: background-color 0.3s;
+  }
+  #channelList div.selected {
+    background-color: #00aaff;
+  }
+  #channelList div:hover {
+    background-color: #005577;
+  }
+  #channelInfo {
+    position: fixed;
+    bottom: 80px;
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 0 10px black;
+    background: rgba(0,0,0,0.6);
+    padding: 10px 0;
+    z-index: 9999;
+    display: none;
+  }
+  #loading {
+    position: fixed;
+    bottom: 140px;
+    width: 100%;
+    text-align: center;
+    font-size: 22px;
+    color: white;
+    z-index: 9999;
+    display: none;
+  }
+  #volumeIndicator {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 30px;
+    height: 200px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    display: none;
+    z-index: 9999;
+  }
+  #volumeLevel {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50%;
+    background: lime;
+  }
 </style>
 </head>
 <body>
@@ -95,7 +97,7 @@
 
 <div id="channelList"></div>
 <div id="channelInfo"></div>
-<div id="loading">Buffering...</div>
+<div id="loading">Yükleniyor...</div>
 <div id="volumeIndicator"><div id="volumeLevel"></div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
@@ -109,98 +111,81 @@ const volumeLevel = document.getElementById('volumeLevel');
 
 let channels = [];
 let currentChannelIndex = 0;
-let showChannelListTimeout = null;
+let showChannelListTimer = null;
 let volume = 50;
+let hls = null;
+let showChannelInfoTimer = null;
 
 const m3uUrl = '1.m3u';
-let hls = null;
 
 fetch(m3uUrl)
-.then(res => res.text())
-.then(parseM3U)
-.then(() => {
-  if(channels.length > 0){
-    loadChannel(currentChannelIndex);
-  }
-});
+  .then(res => res.text())
+  .then(parseM3U)
+  .then(() => {
+    if (channels.length > 0) {
+      populateChannelList();
+      loadChannel(currentChannelIndex, false);
+      highlightChannel(currentChannelIndex);
+    } else {
+      alert("Kanal listesi boş veya m3u dosyası yüklenemedi!");
+    }
+  })
+  .catch(() => alert('M3U dosyası yüklenirken hata oluştu!'));
 
 function parseM3U(data) {
   channels = [];
-  const lines = data.split('\n').map(l => l.trim()).filter(l => l);
-  let currentUrl = '';
-  let currentName = '';
-  for(let i=0; i<lines.length; i++) {
+  const lines = data.split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('#EXTM3U'));
+  let name = '';
+  for(let i=0; i < lines.length; i++) {
     if(lines[i].startsWith('#EXTINF')) {
-      const match = lines[i].match(/#EXTINF.*?,(.*)$/);
-      if(match) currentName = match[1];
+      const match = lines[i].match(/#EXTINF:-?\d*,(.*)/);
+      if(match) {
+        name = match[1];
+      }
     } else if(lines[i].startsWith('http') || lines[i].startsWith('/')) {
-      currentUrl = lines[i];
-      channels.push({name: currentName, url: currentUrl});
+      channels.push({name: name || 'Bilinmeyen Kanal', url: lines[i]});
+      name = '';
     }
   }
-  populateChannelList();
 }
 
 function populateChannelList() {
   channelListDiv.innerHTML = '';
-  channels.forEach((ch, idx) => {
-    const item = document.createElement('div');
-    item.textContent = ch.name;
-    item.style.padding = '5px';
-    item.style.cursor = 'pointer';
-    item.onclick = () => {
+  channels.forEach((channel, idx) => {
+    const chDiv = document.createElement('div');
+    chDiv.textContent = channel.name;
+    chDiv.addEventListener('click', () => {
       loadChannel(idx);
-    };
-    channelListDiv.appendChild(item);
+      highlightChannel(idx);
+      showChannelList();
+    });
+    channelListDiv.appendChild(chDiv);
   });
 }
 
+function highlightChannel(index) {
+  [...channelListDiv.children].forEach((child,i) => {
+    child.classList.toggle('selected', i === index);
+  });
+}
+
+// Kanal listesini göster/gizle
 function showChannelList() {
-  channelListDiv.classList.add('show');
-  if(showChannelListTimeout) clearTimeout(showChannelListTimeout);
-  showChannelListTimeout = setTimeout(() => {
-    channelListDiv.classList.remove('show');
+  channelListDiv.style.display = 'block';
+  if(showChannelListTimer) clearTimeout(showChannelListTimer);
+  showChannelListTimer = setTimeout(() => {
+    channelListDiv.style.display = 'none';
   }, 3000);
 }
 
-function loadChannel(index) {
-  currentChannelIndex = index;
-  const ch = channels[index];
-  showLoading();
-
-  if (Hls.isSupported()) {
-    if (hls) {
-      hls.destroy();
-    }
-    hls = new Hls();
-    hls.loadSource(ch.url);
-    hls.attachMedia(video);
-    hls.on(Hls.Events.MANIFEST_PARSED, function() {
-      hideLoading();
-      video.play();
-      showChannelInfo(ch.name);
-    });
-    hls.on(Hls.Events.ERROR, function (event, data) {
-      console.warn('HLS Error: ', data);
-      hideLoading();
-      showChannelInfo('Kanal Yüklenemedi');
-    });
-  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-    video.src = ch.url;
-    video.addEventListener('loadedmetadata', () => {
-      hideLoading();
-      video.play();
-      showChannelInfo(ch.name);
-    });
-    video.addEventListener('error', () => {
-      hideLoading();
-      showChannelInfo('Kanal Yüklenemedi');
-    });
-  } else {
-    console.error('HLS is not supported on this browser.');
-    hideLoading();
-    showChannelInfo('HLS Desteklenmiyor');
-  }
+// Kanal bilgisini göster en az 5 saniye göster
+function showChannelInfo(name) {
+  clearTimeout(showChannelInfoTimer);
+  channelInfoDiv.textContent = name;
+  channelInfoDiv.style.display = 'block';
+  showChannelInfoTimer = setTimeout(() => {
+    channelInfoDiv.style.display = 'none';
+  }, 5000);
 }
 
 function showLoading() {
@@ -211,32 +196,86 @@ function hideLoading() {
   loadingDiv.style.display = 'none';
 }
 
-function showChannelInfo(name) {
-  channelInfoDiv.textContent = name;
-  channelInfoDiv.style.display = 'block';
-  setTimeout(() => {
-    channelInfoDiv.style.display = 'none';
-  }, 2000);
+function loadChannel(index, showInfo = true) {
+  currentChannelIndex = index;
+  const channel = channels[index];
+
+  showLoading();
+  highlightChannel(index);
+
+  if(hls) {
+    hls.destroy();
+    hls = null;
+  }
+  
+  if (Hls.isSupported() && (channel.url.indexOf('.m3u8') !== -1 || channel.url.indexOf('.ts') !== -1)) {
+    hls = new Hls();
+    hls.loadSource(channel.url);
+    hls.attachMedia(video);
+    hls.on))ls.Events.MANIFEST_PARSED, () => {
+      hideLoading();
+      video.play();
+      if(showInfo) showChannelInfo(channel.name);
+    });
+    hls.on(Hls.Events.ERROR, (event, data) => {
+      console.error('HLS error:', data);
+      hideLoading();
+      if(showInfo) showChannelInfo('Yayın yüklenemedi');
+    });
+  } else {
+    video.src = channel.url;
+    video.load();
+    video.oncanplay = () => {
+      hideLoading();
+      if(showInfo) showChannelInfo(channel.name);
+      video.play();
+    };
+    video.onerror = () => {
+      hideLoading();
+      if(showInfo) showChannelInfo('Yayın oynatılamadı');
+    };
+  }
 }
 
-document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
+// Tam ekran yap
+if(document.documentElement.requestFullscreen){
+  document.documentElement.requestFullscreen().catch(()=>{});
+}
 
+// Klavye kontrolü
 document.addEventListener('keydown', (e) => {
-  if(e.key === 'ArrowLeft') {
-    loadChannel((currentChannelIndex - 1 + channels.length) % channels.length);
-  } else if(e.key === 'ArrowRight') {
-    loadChannel((currentChannelIndex + 1) % channels.length);
-  } else if(e.key === 'ArrowUp') {
-    volume = Math.min(100, volume + 5);
-    updateVolume();
-  } else if(e.key === 'ArrowDown') {
+  if(e.key === 'ArrowUp') {
+    // Kanal önceki
+    const prev = (currentChannelIndex -1 + channels.length) % channels.length;
+    loadChannel(prev);
+    highlightChannel(prev);
+    showChannelList();
+  } else if (e.key === 'ArrowDown') {
+    // Kanal sonraki
+    const next = (currentChannelIndex +1) % channels.length;
+    loadChannel(next);
+    highlightChannel(next);
+    showChannelList();
+  } else if (e.key === 'ArrowLeft') {
+    // Ses azalt
     volume = Math.max(0, volume - 5);
     updateVolume();
-  } else if(e.key === 'Menu' || e.key === 'm') {
-    showChannelList();
+  } else if (e.key === 'ArrowRight') {
+    // Ses artır
+    volume = Math.min(100, volume + 5);
+    updateVolume();
+  } else if (e.key === 'Menu' || e.key.toLowerCase() === 'm') {
+    // Kanal listesini göster / gizle
+    if(channelListDiv.style.display === 'block') {
+      channelListDiv.style.display = 'none';
+      if(showChannelListTimer) clearTimeout(showChannelListTimer);
+    } else {
+      showChannelList();
+    }
   }
 });
 
+// Ses göstergesi
 let volumeTimeout;
 function updateVolume() {
   video.volume = volume/100;
@@ -244,9 +283,12 @@ function updateVolume() {
   volumeIndicator.style.display = 'block';
   if(volumeTimeout) clearTimeout(volumeTimeout);
   volumeTimeout = setTimeout(() => {
-    volumeIndicator.style.display='none';
-  }, 3000);
+    volumeIndicator.style.display = 'none';
+  }, 2000);
 }
+
+// İlk ses ayarı
+updateVolume();
 </script>
 
 </body>
