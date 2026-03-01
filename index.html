@@ -90,44 +90,16 @@ fetch(playlistUrl)
 function parseM3U(data) {
   channels = [];
   const lines = data.split(/\r?\n/);
-  let currentName = '';
+  let currentName = 'Kanal'; // varsayılan isim
   for(let i=0; i<lines.length; i++) {
     if(lines[i].startsWith('#EXTINF')) {
-      const match = lines[i].match(/#EXTINF:-?\d*,(.*)/);
+      const match = lines[i].match(/#EXTINF:-?\d*,([^,[i)$/);
       if(match) currentName = match[1].trim();
     } else if(lines[i].startsWith('http') || lines[i].startsWith('/')) {
-      channels.push({name: currentName || 'Kanal', url: lines[i].trim()});
-      currentName = '';
+      channels.push({name: currentName, url: lines[i].trim()});
+      currentName=''; // sonra gelenEXTINF satırını alır
     }
   }
-}
-
-function initialize() {
-  populateChannelList();
-  loadChannel(currentIdx);
-  document.addEventListener('keydown', handleKey);
-  // Otomatik ilk kanal
-}
-
-function populateChannelList() {
-  channelListDiv.innerHTML = '';
-  channels.forEach((ch, i) => {
-    const div = document.createElement('div');
-    div.textContent = ch.name;
-    if(i===currentIdx) div.classList.add('selected');
-    div.onclick = () => {
-      loadChannel(i);
-      highlightChannel(i);
-      showChannelList();
-    }
-    channelListDiv.appendChild(div);
-  });
-}
-
-function highlightChannel(index) {
-  Array.from(channelListDiv.children).forEach((el,i) => {
-    el.classList.toggle('selected', i===index);
-  });
 }
 
 function showChannelList() {
