@@ -587,6 +587,7 @@ function parseM3U(content) {
 const PROXY_URL = 'https://proud-cake-0566.06mmt8129.workers.dev/';
 
 // Kanal oynat (düzeltilmiş versiyon)
+// TEST MODU: Worker'sız direkt oynat
 function playChannel(index) {
     if (index < 0) index = channels.length - 1;
     if (index >= channels.length) index = 0;
@@ -598,55 +599,22 @@ function playChannel(index) {
     hasError = false;
     errorMessage.classList.remove('active');
     
-    // URL'yi encode et
-    const encodedUrl = encodeURIComponent(channel.url);
-    
-    // İKİ FARKLI FORMAT DENE:
-    // Format 1: Query string parametresi olarak
-    const proxyUrl1 = `${PROXY_URL}/?url=${encodedUrl}`;
-    
-    // Format 2: Path olarak (worker'daki /proxy/ formatını kullan)
-    const proxyUrl2 = `${PROXY_URL}/proxy/${encodedUrl}`;
-    
     console.log('Kanal:', channel.name);
-    console.log('Orjinal URL:', channel.url);
-    console.log('Proxy URL (query):', proxyUrl1);
-    console.log('Proxy URL (path):', proxyUrl2);
+    console.log('URL:', channel.url);
     
-    // Önce query string formatını dene
+    // WORKER'SIZ DİREKT OYNAT
     player.src({
-        src: proxyUrl1,
+        src: channel.url,
         type: getVideoType(channel.url)
     });
     
-    // Eğer query string çalışmazsa path formatını dene
-    player.one('error', () => {
-        console.log('Query string hatası, path formatı deneniyor...');
-        player.src({
-            src: proxyUrl2,
-            type: getVideoType(channel.url)
-        });
-        player.play().catch(e => {
-            console.error('Path formatı da hata verdi:', e);
-            showError();
-        });
-    });
-    
     player.play().catch(e => {
-        console.error('Oynatma hatası:', e);
-        // Hata zaten error event'i ile yakalanacak
+        console.error('Direkt oynatma hatası:', e);
+        showError();
     });
     
     player.one('playing', () => {
-        console.log('✅ Oynatma başladı:', channel.name);
-        if (!hasError && !listVisible) {
-            setTimeout(() => {
-                if (!listVisible) {
-                    infoModal.classList.remove('active');
-                    infoModalVisible = false;
-                }
-            }, 2000);
-        }
+        console.log('✅ Oynatma başladı (worker olmadan)');
     });
     
     updateSelectedChannel();
