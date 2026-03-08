@@ -1,225 +1,164 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" class="bg-black">
 <head>
-<meta charset="UTF-8" />
-<title>TV Box M3U Player</title>
-<style>
-  html, body {
-    margin: 0; padding: 0;
-    background: black;
-    overflow: hidden;
-    height: 100%;
-  }
-  #video {
-    width: 100%;
-    height: 100%;
-    background: black;
-  }
-  #channelList {
-    position: fixed;
-    top: 10px; left: 10px;
-    width: 300px; max-height: 400px;
-    background: rgba(0,0,0,0.8);
-    color: white; padding: 10px; overflow-y: auto;
-    border-radius: 8px;
-    display: block;
-    z-index: 9999;
-  }
-  #channelList div {
-    padding: 8px; cursor: pointer; border-radius: 4px;
-  }
-  #channelList div:hover, #channelList div.selected {
-    background: #0066ff;
-  }
-  #channelName {
-    position: fixed; bottom: 80px; width: 100%; text-align: center;
-    color: #fff; font-size: 24px; font-weight: bold;
-    text-shadow: 0 0 5px black;
-    background: rgba(0,0,0,0.5);
-    display: none; padding: 10px 0; z-index: 999;
-  }
-  #loading {
-    position: fixed; top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 24px; color: #fff; display: none; z-index: 1000;
-  }
-  #volumeBar {
-    position: fixed; right: 20px; bottom: 20px;
-    width: 30px; height: 200px; background: rgba(255,255,255,0.2);
-    border-radius: 4px; overflow: hidden; display: none; z-index: 999;
-  }
-  #volumeLevel {
-    position: absolute; bottom: 0; width: 100%; height: 50%; background: lime;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPTV OYNATICI PRO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; overflow: hidden; cursor: none; background-color: #000; }
+        .full-screen-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        .channel-menu { position: absolute; top: 0; left: -30%; width: 30%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px); transition: left 0.3s ease; padding: 1.5rem; display: flex; flex-direction: column; z-index: 50; border-right: 1px solid rgba(255,255,255,0.1); }
+        .channel-menu.open { left: 0; }
+        .channel-list-item { padding: 0.8rem 1rem; font-weight: bold; color: #4dd0e1; text-transform: uppercase; border-radius: 8px; border: 2px solid transparent; margin-bottom: 0.5rem; transition: all 0.2s; }
+        .channel-list-item.selected { background: rgba(77, 208, 225, 0.2); color: #fff; transform: scale(1.02); border-color: #fff; box-shadow: 0 0 15px rgba(77, 208, 225, 0.3); }
+        .bottom-info-bar { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(transparent, rgba(0,0,0,0.95)); padding: 3rem 2rem 1.5rem; opacity: 0; transition: opacity 0.5s; z-index: 40; pointer-events: none; }
+        #exit-dialog { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 100; }
+        .volume-bar-container { position: absolute; bottom: 6rem; left: 50%; transform: translateX(-50%); width: 200px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 99px; opacity: 0; transition: opacity 0.3s; z-index: 45; }
+        .volume-level-bar { height: 100%; background: #FFC107; border-radius: 99px; }
+    </style>
 </head>
-<body>
+<body class="bg-black text-white">
 
-<video id="video"></video>
-<div id="loading">Yükleniyor...</div>
-<div id="channelName"></div>
-<div id="volumeBar"><div id="volumeLevel"></div></div>
-<div id="channelList"></div>
+    <video id="video-player" class="full-screen-video" autoplay></video>
 
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<script>
-const video = document.getElementById('video');
-const playlistUrl = '1.m3u';
+    <div id="channel-menu" class="channel-menu">
+        <h2 class="text-xl font-black mb-6 tracking-widest border-b border-zinc-700 pb-2">KANALLAR</h2>
+        <ul id="channel-list" class="flex-grow overflow-y-auto pr-2 custom-scroll"></ul>
+    </div>
 
-const channelListDiv = document.getElementById('channelList');
-const channelNameDiv = document.getElementById('channelName');
-const loadingDiv = document.getElementById('loading');
-const volumeBar = document.getElementById('volumeBar');
-const volumeLevel = document.getElementById('volumeLevel');
+    <div id="bottom-info-bar" class="bottom-info-bar">
+        <div class="text-xs font-bold text-zinc-400 tracking-widest">ŞU AN OYNATILIYOR</div>
+        <div id="info-channel-name" class="text-3xl font-black text-cyan-400 uppercase">Yükleniyor...</div>
+    </div>
 
-let channels = [];
-let currentIdx = 0;
-let hls = null;
-let volume = 50;
-let hideChannelListTimeout = null;
-let hideInfoTimeout = null;
-let volumeTimeout = null;
+    <div id="volume-bar-container" class="volume-bar-container">
+        <div id="volume-level-bar" class="volume-level-bar"></div>
+    </div>
 
-// Dosya yükleme ve listesi
-fetch(playlistUrl)
-  .then(res => res.text())
-  .then(parseM3U)
-  .then(initialize)
-  .catch(() => alert('M3U dosyası yüklenemedi!'));
+    <div id="exit-dialog">
+        <div class="bg-zinc-900 p-10 rounded-3xl border border-zinc-700 text-center">
+            <h2 class="text-2xl font-black mb-8">ÇIKIŞ YAPILSIN MI?</h2>
+            <div class="flex gap-6 justify-center">
+                <button onclick="window.close()" class="bg-red-600 px-10 py-3 rounded-xl font-bold">EVET</button>
+                <button onclick="toggleExit(false)" class="bg-zinc-700 px-10 py-3 rounded-xl font-bold">HAYIR</button>
+            </div>
+        </div>
+    </div>
 
-function parseM3U(data) {
-  channels = [];
-  const lines = data.split(/\r?\n/);
-  let currentName = '';
-  for(let i = 0; i < lines.length; i++) {
-    const line = lines[i].trim();
-    if(line.startsWith('#EXTINF')) {
-      // Kanal adını çıkart
-      const match = line.match(/#EXTINF:-?\d+,(.+)/);
-      if(match) {
-        currentName = match[1].trim();
-      } else {
-        currentName = 'İsimsiz Kanal';
-      }
-    } else if(line && !line.startsWith('#')) {
-      // Bu satır URL olmalı
-      channels.push({name: currentName || 'İsimsiz Kanal', url: line});
-      currentName = '';
-    }
-  }
-}
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        const videoPlayer = document.getElementById('video-player');
+        const channelList = document.getElementById('channel-list');
+        const channelMenu = document.getElementById('channel-menu');
+        const infoBar = document.getElementById('bottom-info-bar');
+        const infoName = document.getElementById('info-channel-name');
+        
+        let channels = [];
+        let currentIdx = 0;
+        let selectedIdx = 0;
+        let hls = null;
+        let zapTimer, menuTimer, infoTimer, volTimer;
 
+        // 1.TXT DOSYASINDAN VERİ ÇEKME
+        async function loadChannels() {
+            try {
+                const response = await fetch('1.txt');
+                const data = await response.text();
+                channels = data.trim().split('#EXTINF:-1,').slice(1).map(entry => {
+                    const lines = entry.split('\n');
+                    return { name: lines[0].trim(), url: lines[1].trim() };
+                });
+                if (channels.length > 0) playChannel(0);
+            } catch (err) {
+                infoName.textContent = "LİSTE YÜKLENEMEDİ!";
+                console.error(err);
+            }
+        }
 
-function showChannelList() {
-  channelListDiv.style.display = 'block';
-  if(hideChannelListTimeout) clearTimeout(hideChannelListTimeout);
-  hideChannelListTimeout = setTimeout(()=> {
-    channelListDiv.style.display='none';
-  },3000);
-}
+        function playChannel(idx) {
+            clearTimeout(zapTimer);
+            zapTimer = setTimeout(() => {
+                if (idx < 0) idx = channels.length - 1;
+                if (idx >= channels.length) idx = 0;
+                currentIdx = idx;
+                const ch = channels[currentIdx];
+                
+                showInfo(ch.name);
+                if (hls) hls.destroy();
 
-function showLoading(show=true) {
-  loadingDiv.style.display = show ? 'block' : 'none';
-}
+                if (Hls.isSupported()) {
+                    hls = new Hls({ maxBufferLength: 10, enableWorker: true });
+                    hls.loadSource(ch.url);
+                    hls.attachMedia(videoPlayer);
+                    hls.on(Hls.Events.MANIFEST_PARSED, () => videoPlayer.play());
+                } else {
+                    videoPlayer.src = ch.url;
+                    videoPlayer.play();
+                }
+            }, 400);
+        }
 
-function showChannelName(name) {
-  clearTimeout(hideInfoTimeout);
-  channelNameDiv.textContent = name;
-  channelNameDiv.style.display='block';
-  hideInfoTimeout = setTimeout(()=> {
-    channelNameDiv.style.display='none';
-  },5000);
-}
+        function renderMenu() {
+            channelList.innerHTML = '';
+            channels.forEach((ch, i) => {
+                const li = document.createElement('li');
+                li.className = `channel-list-item ${i === selectedIdx ? 'selected' : ''}`;
+                li.textContent = ch.name;
+                channelList.appendChild(li);
+            });
+            const sel = channelList.querySelector('.selected');
+            if (sel) sel.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        }
 
-function loadChannel(index) {
-  currentIdx = index;
-  const ch = channels[index];
-  showLoading(true);
-  highlightChannel(index);
-  // HLS yatkınlık
-  if(hls) { hls.destroy(); hls=null; }
-  // Çok formatlı oynatma
-  if(Hls.isSupported() && (ch.url.endsWith('.m3u8') || ch.url.includes('.ts') || ch.url.includes('.m3u'))) {
-    hls = new Hls();
-    hls.loadSource(ch.url);
-    hls.attachMedia(video);
-    hls.on(Hls.Events.MANIFEST_PARSED, ()=> {
-      showLoading(false);
-      showChannelName(ch.name);
-      video.play();
-    });
-    hls.on(Hls.Events.ERROR, (e,d)=> {
-      console.log('HLS hata', d);
-      showLoading(false);
-      showChannelName('Hata: Yayın yüklenemedi');
-    });
-  } else {
-    // Doğrudan video-src
-    video.src = ch.url;
-    video.load();
-    video.oncanplay = () => {
-      showLoading(false);
-      showChannelName(ch.name);
-      video.play();
-    }
-    video.onerror = ()=> {
-      showLoading(false);
-      showChannelName('Yayın açılamadı');
-    }
-  }
-}
+        function toggleMenu(show) {
+            clearTimeout(menuTimer);
+            if (show) {
+                selectedIdx = currentIdx;
+                renderMenu();
+                channelMenu.classList.add('open');
+                menuTimer = setTimeout(() => toggleMenu(false), 8000);
+            } else {
+                channelMenu.classList.remove('open');
+            }
+        }
 
-// Şifreleme veya tam ekran gerekebilir, ama temel
-if(document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(()=>{});
+        function showInfo(name) {
+            clearTimeout(infoTimer);
+            infoName.textContent = name;
+            infoBar.style.opacity = "1";
+            infoTimer = setTimeout(() => infoBar.style.opacity = "0", 4000);
+        }
 
-// Kumanda: Tuş olayları
-function handleKey(e) {
-  switch(e.key) {
-    case 'ArrowUp': // önceki kanal
-      loadChannel((currentIdx -1 + channels.length) % channels.length);
-      highlightChannel(currentIdx);
-      showChannelList();
-      break;
-    case 'ArrowDown': // sonraki kanal
-      loadChannel((currentIdx +1) % channels.length);
-      highlightChannel(currentIdx);
-      showChannelList();
-      break;
-    case 'ArrowLeft':
-      // Ses azalt
-      volume = Math.max(0, volume -5);
-      updateVolume();
-      break;
-    case 'ArrowRight':
-      // Ses artır
-      volume = Math.min(100, volume +5);
-      updateVolume();
-      break;
-    case 'm':
-    case 'Escape':
-    case 'Menu':
-      // Menü (kanal listesi göster/gizle)
-      if(channelListDiv.style.display==='block'){
-        channelListDiv.style.display='none'
-      } else {
-        showChannelList();
-      }
-      break;
-  }
-}
+        function toggleExit(show) { document.getElementById('exit-dialog').style.display = show ? 'flex' : 'none'; }
 
-// Ses göstergesi
-function updateVolume() {
-  video.volume = volume/100;
-  volumeLevel.style.height = volume + '%';
-  volumeBar.style.display='block';
-  if(volumeTimeout) clearTimeout(volumeTimeout);
-  volumeTimeout=setTimeout(()=> {
-    volumeBar.style.display='none';
-  },2000);
-}
-// başlangıçta ses
-updateVolume();
-</script>
+        window.addEventListener('keydown', (e) => {
+            const isMenu = channelMenu.classList.contains('open');
+            if (document.getElementById('exit-dialog').style.display === 'flex') return;
+
+            switch (e.key) {
+                case 'ArrowUp':
+                    if (isMenu) { selectedIdx = (selectedIdx - 1 + channels.length) % channels.length; renderMenu(); }
+                    else playChannel(currentIdx - 1);
+                    break;
+                case 'ArrowDown':
+                    if (isMenu) { selectedIdx = (selectedIdx + 1) % channels.length; renderMenu(); }
+                    else playChannel(currentIdx + 1);
+                    break;
+                case 'Enter':
+                case 'OK':
+                    if (isMenu) { playChannel(selectedIdx); toggleMenu(false); }
+                    else toggleMenu(true);
+                    break;
+                case 'Escape':
+                case 'Back':
+                    if (isMenu) toggleMenu(false);
+                    else toggleExit(true);
+                    break;
+            }
+        });
+
+        window.onload = loadChannels;
+    </script>
 </body>
 </html>
