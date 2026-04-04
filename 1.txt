@@ -1,199 +1,233 @@
 #EXTM3U
-#EXTINF:-1 group-title="TEST",DSM - Kanal D
-http://45.74.244.181:2003/izle/a2FuYWxk.m3u8
-#EXTINF:-1 group-title="TEST",DSM - Movie Smart Türk
-http://45.74.244.181:2003/izle/bW92aWVzbWFydHRyaw.m3u8
-#EXTINF:-1 group-title="TEST",DSM - Ulusal Çoklu Ekran
-http://45.74.244.181:2003/izle/dWx1c2Fsb2tsdWVrcmFu.m3u8
-#EXTINF:-1 group-title="TEST",Kablo Tv - Cosmo Sports
-http://45.74.244.181:3800/izle/cosmosports.m3u8
-#EXTINF:-1 group-title="TEST",Kablo Tv - Sinema Yerli
-http://45.74.244.181:3800/izle/sinemayerli.m3u8
-#EXTINF:-1 group-title="Ulusal",TRT 1 -A-
-https://tv-trt1.medya.trt.com.tr/master.m3u8
-#EXTINF:-1 group-title="Ulusal",TRT 1 -B-
-https://heyheey.denek1544.workers.dev/izle/trt1-114.m3u8
-#EXTINF:-1 group-title="Ulusal",TRT Türk -A-
-https://tv-trtturk.medya.trt.com.tr/master.m3u8
-#EXTINF:-1 group-title="Ulusal",TRT Türk -B-
-https://ulusunkorkma.testworker0y.workers.dev/channel/VFJUIFTDvHJr
-#EXTINF:-1 group-title="Ulusal",Kanal D -A-
-https://heyheey.denek1544.workers.dev/izle/kanald-112.m3u8
-#EXTINF:-1 group-title="Ulusal",Kanal D -B-
-https://ulusunkorkma.testworker0y.workers.dev/channel/S2FuYWwgRCB8IEE=
-#EXTINF:-1 group-title="Ulusal",Kanal D -C-
-https://demiroren.daioncdn.net/kanald/kanald.m3u8?app=kanald_web&ce=3&ppid=c40673c58bc0fa0057743e1050115aa3
-#EXTINF:-1 group-title="Ulusal",Show Tv -A-
-https://heyheey.denek1544.workers.dev/izle/showtv.m3u8
-#EXTINF:-1 group-title="Ulusal",Show Tv -B-
-https://ulusunkorkma.testworker0y.workers.dev/channel/U2hvdyBUViB8IEE=
-#EXTINF:-1 group-title="Ulusal",ATV -A-
-https://heyheey.denek1544.workers.dev/izle/atv-110.m3u8
-#EXTINF:-1 group-title="Ulusal",ATV -B-
-https://ulusunkorkma.testworker0y.workers.dev/channel/QXR2IHwgQg==
-#EXTINF:-1 group-title="Ulusal",Star Tv -A-
-https://heyheey.denek1544.workers.dev/izle/startv-113.m3u8
-#EXTINF:-1 group-title="Ulusal",Star Tv -B-
-https://ulusunkorkma.testworker0y.workers.dev/channel/U3RhciBUViB8IEE=
-#EXTINF:-1 group-title="Ulusal",Now -A-
-https://heyheey.denek1544.workers.dev/izle/foxtv.m3u8
-#EXTINF:-1 group-title="Ulusal",Tv 8 -A-
-https://tv8.daioncdn.net/tv8/tv8.m3u8?app=7ddc255a-ef47-4e81-ab14-c0e5f2949788&ce=3&
-#EXTINF:-1 group-title="Ulusal",Tv 8 -B-
-http://45.74.244.181:2003/izle/dWx1c2FsdHY4.m3u8
-#EXTINF:-1 group-title="Ulusal",Tv 8 -C-
-https://ulusunkorkma.testworker0y.workers.dev/channel/VHY4IHwgQw==
-#EXTINF:-1 group-title="Ulusal",5 -A-
-https://ulusunkorkma.testworker0y.workers.dev/channel/VHY4LjUgfCBB
-#EXTINF:-1 group-title="Ulusal",Kanal 7 -A-
-https://heyheey.denek1544.workers.dev/izle/kanal7-106.m3u8
-#EXTINF:-1 group-title="Ulusal",Kanal 7 -B-
-http://45.74.244.181:2003/izle/a2FuYWw3.m3u8
-#EXTINF:-1 group-title="Ulusal",Dmax -A-
-https://dogus.daioncdn.net/dmax/dmax.m3u8?ce=3&app=5a02c599-d17e-4982-9b04-090934d51af7&token=dUtLcFk4TkM1YjBOWlFIa1huL0UrMUYvcjhEcStnVU1TZUpsOVo5QXV4ST0=
-#EXTINF:-1 group-title="Ulusal",TLC -A-
-https://dogus.daioncdn.net/tlc/tlc.m3u8?ce=3&app=1aca0aa1-06e3-41ff-a8e5-38d7df475469&token=V1JHMUZBdGFOV0k2d2szUm5hVzA4RFdmejliTEVnQkZEQWNEN29qNzJ6Yz0=
-#EXTINF:-1 group-title="Ulusal",360 Tv -A-
-https://turkmedya-live.ercdn.net/tv360/tv360_1080p.m3u8
-#EXTINF:-1 group-title="Ulusal",Beyaz Tv -A-
-https://heyheey.denek1544.workers.dev/izle/beyaztv-105.m3u8
-#EXTINF:-1 group-title="Ulusal",Teve 2 -A-
-https://ulusunkorkma.testworker0y.workers.dev/channel/VGV2ZTI=
-#EXTINF:-1 group-title="Haber",Ülke Tv
-http://87.121.104.29:1855/ultetv/stream.m3u8
-#EXTINF:-1 group-title="Haber",A Haber -A-
-http://87.121.104.29:1855/ahberyt/stream.m3u8
-#EXTINF:-1 group-title="Haber",A Haber -B-
-https://hbrgelmediyardan.testworker0y.workers.dev/channel/QSBIYWJlcg==
-#EXTINF:-1 group-title="Haber",TvNet - YT
-http://87.121.104.29:1855/tvnetyt/stream.m3u8
-#EXTINF:-1 group-title="Haber",CNN Türk YT
-http://87.121.104.29:1855/cnnytcanli/stream.m3u8
-#EXTINF:-1 group-title="Haber",CNN Türk
-http://87.121.104.29:2003/izle/dHJrY25udHJr.m3u8
-#EXTINF:-1 group-title="Haber",TRT Haber
-https://hbrgelmediyardan.testworker0y.workers.dev/channel/VFJUIEhhYmVyIHwgQQ==
-#EXTINF:-1 group-title="Haber",Haber Türk
-https://hbrgelmediyardan.testworker0y.workers.dev/channel/SGFiZXJ0w7xyayB8IEI=
-#EXTINF:-1 group-title="Haber",NTV
-https://hbrgelmediyardan.testworker0y.workers.dev/channel/TlRW
-#EXTINF:-1 group-title="Haber",TV 100
-https://hbrgelmediyardan.testworker0y.workers.dev/channel/VFYxMDAgfCBB
-#EXTINF:-1 group-title="YouTube Live",Kemal Sunal 7/24
-http://87.121.104.29:1855/kemalsunal/stream.m3u8
-#EXTINF:-1 group-title="YouTube Live",Arzu Film Yeşilçam 7/24
-http://87.121.104.29:1855/arzufilm/stream.m3u8
-#EXTINF:-1 group-title="YouTube Live",Gülşah Film 7/24
-http://87.121.104.29:1855/gulsahfilm/stream.m3u8
-#EXTINF:-1 group-title="YouTube Live",Kurtlar Vadisi 7/24
-http://87.121.104.29:1855/kurtlarvadisi/stream.m3u8
-#EXTINF:-1 group-title="YouTube Live",Kurtlar Vadisi Pusu 7/24
-http://87.121.104.29:1855/kurtlarvadisipusu/stream.m3u8
-#EXTINF:-1 group-title="YouTube Live",Aşk-ı Memnu 7/24
-http://87.121.104.29:1855/askimemnu/stream.m3u8
-#EXTINF:-1 group-title="YouTube Live",TRT Nostalji 7/24
-http://87.121.104.29:1855/trtnostalji/stream.m3u8
-#EXTINF:-1 group-title="YouTube Live",Çocuklar Duymasın 7/24
-http://87.121.104.29:1855/cocuklarduymasin/stream.m3u8
-#EXTINF:-1 group-title="YouTube Live",Yaprak Dökümü 7/24
-http://87.121.104.29:1855/yaprakdokumu/stream.m3u8
-#EXTINF:-1 group-title="YouTube Live",Yeşil Deniz 7/24
-http://87.121.104.29:1855/yesildenizyt/stream.m3u8
-#EXTINF:-1 group-title="YouTube Live",Gönül Dağı 7/24
-http://87.121.104.29:1855/gonuldagiyt/stream.m3u8
-#EXTINF:-1 group-title="YouTube Live",Yedi Numara
-http://87.121.104.29:1855/yedinumarayt/stream.m3u8
-#EXTINF:-1 group-title="YouTube Live",Taşacak Bu Deniz 7/24
-http://87.121.104.29:1855/tasacakdenizyt/stream.m3u8
-#EXTINF:-1 group-title="YouTube Live",Bizimkiler 7/24
-http://87.121.104.29:1855/trtnostalji/stream2.m3u8
-#EXTINF:-1 group-title="Belgesel",TLC Suç ve Araştırma
-http://87.121.104.29:1855/tlcsucvearastirma/stream.m3u8
-#EXTINF:-1 group-title="Belgesel",Nature Time Türkçede
-http://87.121.104.29:1855/naturetimetr/stream.m3u8
-#EXTINF:-1 group-title="Belgesel",Bizim Ev - YT
-http://87.121.104.29:1855/bizimevyt/stream.m3u8
-#EXTINF:-1 group-title="Belgesel",TRT Belgesel -B-
-https://tv-trtbelgesel.medya.trt.com.tr/master.m3u8
-#EXTINF:-1 group-title="Belgesel",Tarih TV
-https://heyheey.denek1544.workers.dev/izle/tarihtv.m3u8
-#EXTINF:-1 group-title="Belgesel",National Geographic
-https://yokyokyoky.testworker0y.workers.dev/channel/TmF0aW9uYWwgR2VvZ3JhcGhpYw==
-#EXTINF:-1 group-title="Belgesel",National Geographic Wild
-https://yokyokyoky.testworker0y.workers.dev/channel/TmF0aW9uYWwgR2VvIFdJTEQ=
-#EXTINF:-1 group-title="Belgesel",Viasat Nature
-https://heyheey.denek1544.workers.dev/izle/historychannel.m3u8
-#EXTINF:-1 group-title="Belgesel",Viasat History
-https://heyheey.denek1544.workers.dev/izle/viasathistory.m3u8
-#EXTINF:-1 group-title="Belgesel",Love Nature
-https://heyheey.denek1544.workers.dev/izle/lovenature.m3u8
-#EXTINF:-1 group-title="Belgesel",BBC Earth
-https://heyheey.denek1544.workers.dev/izle/bbcearthhd.m3u8
-#EXTINF:-1 group-title="Belgesel",Discovery Channel
-https://yokyokyoky.testworker0y.workers.dev/channel/RGlzY292ZXJ5IENoYW5uZWw=
-#EXTINF:-1 group-title="Belgesel",Discovery Science
-https://yokyokyoky.testworker0y.workers.dev/channel/RGlzY292ZXJ5IFNjaWVuY2U=
-#EXTINF:-1 group-title="Belgesel",Discovery ID
-https://new.testworkery0.workers.dev/stream/aHR0cHM6Ly9kc21hcnRnby1saXZlLmVyY2RuLm5ldC9kaXNjb3ZlcnlzY2llbmNlL2Rpc2NvdmVyeXNjaWVuY2UubTN1OA==.m3u8
-#EXTINF:-1 group-title="Belgesel",Viasat Explore
-https://yokyokyoky.testworker0y.workers.dev/channel/Vmlhc2F0IEV4cGxvcmU=
-#EXTINF:-1 group-title="Belgesel",DocuBOX
-https://yokyokyoky.testworker0y.workers.dev/channel/RG9jdUJveA==
-#EXTINF:-1 group-title="Belgesel",TGRT Belgesel
-http://87.121.104.29:1855/tgrtbelgeselyt/stream.m3u8
-#EXTINF:-1 group-title="Sinema Kanalları",Fx
-https://dsfvcg.denek1544.workers.dev/channel/Rlg=.m3u8
-#EXTINF:-1 group-title="Sinema Kanalları",Sinema Tv
-https://dsfvcg.denek1544.workers.dev/channel/U2luZW1hIFRW.m3u8
-#EXTINF:-1 group-title="Sinema Kanalları",Sinema Tv 2
-https://dsfvcg.denek1544.workers.dev/channel/U2luZW1hIFRWIDI=.m3u8
-#EXTINF:-1 group-title="Sinema Kanalları",Sinema Aile
-https://dsfvcg.denek1544.workers.dev/channel/U2luZW1hIFRWIEFpbGU=.m3u8
-#EXTINF:-1 group-title="Sinema Kanalları",Sinema Aile 2
-https://dsfvcg.denek1544.workers.dev/channel/U2luZW1hIFRWIEFpbGUgMg==.m3u8
-#EXTINF:-1 group-title="Sinema Kanalları",Sinema Aksiyon
-https://dsfvcg.denek1544.workers.dev/channel/U2luZW1hIFRWIEFrc2l5b24=.m3u8
-#EXTINF:-1 group-title="Sinema Kanalları",Sinema Aksiyon 2
-https://dsfvcg.denek1544.workers.dev/channel/U2luZW1hIFRWIEFrc2l5b24gMg==.m3u8
-#EXTINF:-1 group-title="Sinema Kanalları",Sinema Komedi
-https://heyheey.denek1544.workers.dev/izle/sinematvkomedi-57.m3u8
-#EXTINF:-1 group-title="Sinema Kanalları",Sinema Komedi 2
-https://dsfvcg.denek1544.workers.dev/channel/U2luZW1hIFRWIEtvbWVkaSAy.m3u8
-#EXTINF:-1 group-title="Sinema Kanalları",Sinema Tv 1001
-https://dsfvcg.denek1544.workers.dev/channel/U2luZW1hIFRWIDEwMDE=.m3u8
-#EXTINF:-1 group-title="Sinema Kanalları",Sinema Tv 1002
-https://dsfvcg.denek1544.workers.dev/channel/U2luZW1hIFRWIDEwMDI=.m3u8
-#EXTINF:-1 group-title="Sinema Kanalları",Film Screen
-https://dsfvcg.denek1544.workers.dev/channel/RmlsbWJveCBUw7xya2l5ZQ==.m3u8
-#EXTINF:-1 group-title="Sinema Kanalları",Sinema Tv Yedek
-https://heyheey.denek1544.workers.dev/izle/sinematv-61.m3u8
-#EXTINF:-1 group-title="Sinema Kanalları",Sinema Tv 2 Yedek
-https://heyheey.denek1544.workers.dev/izle/sinematv2.m3u8
-#EXTINF:-1 group-title="Sinema Kanalları",Sinema Tv Aksiyon Yedek
-https://heyheey.denek1544.workers.dev/izle/sinematvaksiyon.m3u8
-#EXTINF:-1 group-title="Sinema Kanalları",Sinema Tv Komedi Yedek
-https://heyheey.denek1544.workers.dev/izle/sinematvkomedi.m3u8
-#EXTINF:-1 group-title="Sinema Kanalları",Sinema Tv Aile Yedek
-https://heyheey.denek1544.workers.dev/izle/sinematvaile.m3u8
-#EXTINF:-1 group-title="Sinema Kanalları",Sinema Tv 1001 Yedek
-https://heyheey.denek1544.workers.dev/izle/sinematv1001.m3u8
-#EXTINF:-1 group-title="Sinema Kanalları",Sinema Tv 1002 Yedek
-https://heyheey.denek1544.workers.dev/izle/sinematv1002.m3u8
-#EXTINF:-1 group-title="Eğlence",Güldür Güldür 7/24
-http://87.121.104.29:1855/guldurguldur/stream.m3u8
-#EXTINF:-1 group-title="Eğlence",ÇGH2 7/24
-http://87.121.104.29:1855/cgh2/stream.m3u8
-#EXTINF:-1 group-title="Dinlenme Vakti",Karışık Rahatlama
-http://87.121.104.29:1855/rahatlamaseans/stream.m3u8
-#EXTINF:-1 group-title="Dinlenme Vakti",Akustik Türküler 7/24
-http://87.121.104.29:1855/akustikturku/stream.m3u8
-#EXTINF:-1 group-title="Dinlenme Vakti",Okyanus Sesleri
-http://87.121.104.29:1855/okyanus/stream.m3u8
-#EXTINF:-1 group-title="Dinlenme Vakti",Şömine
-http://87.121.104.29:1855/somine/stream.m3u8
-#EXTINF:-1 group-title="Dinlenme Vakti",Rahatlatıcı Sesler
-http://87.121.104.29:1855/rahatlaticises/stream.m3u8
-#EXTINF:-1 group-title="Dinlenme Vakti",Orman Sesleri
-http://87.121.104.29:1855/ormansesleri/stream.m3u8
-#EXTINF:-1 group-title="Dinlenme Vakti",Kral Müzik
-http://87.121.104.29:1855/kralmuzikyt/stream.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/38c96316664c627edd5f1af4d13fbc94" group-title="AILE TV Azerbaijan",AZ TV
+http://cdn.ailetv.workers.dev/1ca7d16d-3832-43e7-8400-09e936271e13.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/0dbf26237c3adbdac34d8883a113b33d" group-title="AILE TV Azerbaijan",İctimai TV
+http://cdn.ailetv.workers.dev/2df8367a-b63a-43bf-b08c-a8539f20d5c7.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/c9f06bb0e6a283510d488b41ae49ac0b" group-title="AILE TV Azerbaijan",ATV
+http://cdn.ailetv.workers.dev/f30237bf-e37b-498b-bf6c-0d54cfb9036c.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/aa074e0e4ecbf21d95b954c1c893d93e" group-title="AILE TV Azerbaijan",ARB TV
+http://cdn.ailetv.workers.dev/01f3c971-72e6-4f94-a866-29effc6c7d2b.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/ac4a1b6e5159aea62063765249e1e19c" group-title="AILE TV Azerbaijan",Mədəniyyət
+http://cdn.ailetv.workers.dev/0235e952-2b7b-4148-a7b9-ab56f84e6159.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/77632a683e3a1ff38ec390bfee1e259a" group-title="AILE TV Azerbaijan",Xəzər TV
+http://cdn.ailetv.workers.dev/48cc7f07-93aa-4509-ae71-1ce902686c85.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/cb70436fbb409ff0769409fb12a9aaea" group-title="AILE TV Azerbaijan",Space TV
+http://cdn.ailetv.workers.dev/f523ff98-d084-4025-891c-6c1f9c3d0aff.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/120af1d0480724bde710df62b739d154" group-title="AILE TV Azerbaijan",CBC
+http://cdn.ailetv.workers.dev/605cf2ed-b0c6-4bad-8b2f-6ef9057a2b29.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/e1d5e5151a7390f0b970b693f4f6989b" group-title="AILE TV Azerbaijan",DunyaTV
+http://cdn.ailetv.workers.dev/2ab5dfa1-48ed-4932-9644-17cbd1c8f52d.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/1b13b46d0780ef0a395c0b2a5981f8d1" group-title="AILE TV Azerbaijan",Kanal S
+http://cdn.ailetv.workers.dev/c7993e21-3e21-4926-8967-3222f6490854.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/28b65fd3abef945bf3a5b692414508d4" group-title="AILE TV Russian",Первый
+http://cdn.ailetv.workers.dev/d332d931-1a83-4691-a80f-892a363f61f9.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/c7f8b7ae221c8eb5fad2a17e949394d1" group-title="AILE TV Russian",Россия 1
+http://cdn.ailetv.workers.dev/25127701-a337-47a7-9237-62b8cc7763ba.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/83c1097db9c1a3c276e6a004747bb1d6" group-title="AILE TV Russian",НТВ
+http://cdn.ailetv.workers.dev/3fe5d30d-28f3-452b-87c2-3e336cda9058.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/327c10a85603c4316b41848ff54ec66a" group-title="AILE TV Russian",ТНТ
+http://cdn.ailetv.workers.dev/f11a4dc0-f9c4-48fc-98a8-d1b02e586b0c.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/9074a53e43a65f77bba8a1a242d40b89" group-title="AILE TV Russian",ТНТ 4
+http://cdn.ailetv.workers.dev/d31dbccc-c4da-4262-8f7d-ac4719788f5d.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/9b52d1bdfab112de820960c8270e02eb" group-title="AILE TV Russian",СТС
+http://cdn.ailetv.workers.dev/d091cd39-0aa6-4a06-9b1c-69c7ae724507.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/f96de898fa7f2f7a169b0376f9163a70" group-title="AILE TV Russian",РЕН ТВ
+http://cdn.ailetv.workers.dev/901a4e41-d54e-4703-914f-d9765d7d001b.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/376186f6acf772957322652fa4752378" group-title="AILE TV Russian",Пятница
+http://cdn.ailetv.workers.dev/8676ef1c-5a04-4644-bcc1-a8da2cdd4025.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/5b2ae9db6dc452dbcd9fb36b3855b705" group-title="AILE TV Russian",ЧЕ
+http://cdn.ailetv.workers.dev/aa8d6a23-5b92-4d50-941d-70b6c1d51f9a.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/5a261dab02f622112a3564e682ef96cd" group-title="AILE TV Russian",Домашний
+http://cdn.ailetv.workers.dev/608ba905-8b55-48b9-85a6-58e0b1a77473.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/96b258ba082acb715a907b2754dd4ca9" group-title="AILE TV Turkish",Show TV
+http://cdn.ailetv.workers.dev/b003c480-64dd-4a21-b36e-c38f318c6341.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/4843b18deb4841621efea82d9aea2d17" group-title="AILE TV Turkish",ATV Türk
+http://cdn.ailetv.workers.dev/10ad1af8-a8ed-4a6e-97a2-fec0c55ab144.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/710b6394bca8927e746718a90861acdd" group-title="AILE TV Turkish",Star
+http://cdn.ailetv.workers.dev/6216eb8f-18a3-492c-8cdb-ffa2a2d09df5.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/e3fa5ffaf1837f78da15c92ecd379b9f" group-title="AILE TV Turkish",KANAL D
+http://cdn.ailetv.workers.dev/342b5c3f-b806-4118-85c5-3f2c0014b984.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/3048337941eff37238ced47032feed17" group-title="AILE TV Turkish",TV 8
+http://cdn.ailetv.workers.dev/21e77726-3fb0-4799-9f76-835bcf7a3786.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/c95fa5c192df133fc3bb4c0bc57afd9a" group-title="AILE TV Turkish",TV 8,5
+http://cdn.ailetv.workers.dev/7b78a00c-630f-4027-b832-ba3f781ca3c1.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/12735153cccb8f7feab0a6e57abafe9c" group-title="AILE TV Turkish",NOW TV
+http://cdn.ailetv.workers.dev/4779d56f-8036-4766-9a09-241e59eb67aa.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/cc087e6fe7e471625662a08a3fac3da7" group-title="AILE TV Turkish",TRT 1
+http://cdn.ailetv.workers.dev/a1fc1386-cd59-4031-ad25-bcbcc4b0d463.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/45f7637845967f7f440862ad736fd9f3" group-title="AILE TV Turkish",TRT 2
+http://cdn.ailetv.workers.dev/e60af05f-dbde-49f5-9de4-76b7c6b6be9e.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/2ecc08bb64913fa283e4f42ed378aaf5" group-title="AILE TV Turkish",Kanal 7
+http://cdn.ailetv.workers.dev/2ba997fd-8f24-45aa-bb56-24464206be74.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/78087f2cd4b490ddc6e8578c3cd98ec0" group-title="AILE TV Entertainment",TLC Türk
+http://cdn.ailetv.workers.dev/a4ccca4d-46e0-40ec-8368-2c78c2973e98.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/0badc28059b5f13557351dfd8cf69ba5" group-title="AILE TV Entertainment",TLC Rus
+http://cdn.ailetv.workers.dev/2624d130-e3d0-491b-bede-bb3ac3369506.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/221608b07f9176efd1d70b99afdedddd" group-title="AILE TV Entertainment",SILK WAY TV
+http://cdn.ailetv.workers.dev/0132bcb1-32fd-41a5-ac72-6328c388fb0d.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/56e7527847c6d879e74537c661ff9ed3" group-title="AILE TV Entertainment", ПОЕХАЛИ ТВ
+http://cdn.ailetv.workers.dev/3b80b582-8d8d-47a7-a935-500e83144e1f.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/90a092f7b4a733ef322299b204c0ec2c" group-title="AILE TV Entertainment",Авто Плюс
+http://cdn.ailetv.workers.dev/0ac58db0-68e5-4a78-b778-46d4b2904211.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/babee196eb5b1408bb5006a0e6b79b7a" group-title="AILE TV Entertainment",Авто 24
+http://cdn.ailetv.workers.dev/183f5ba2-d4c5-4b71-b6ec-7e8ce80d52ce.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/1b63a13eed5cf4f253f0ec31333c97d1" group-title="AILE TV Entertainment",ДРАЙВ
+http://cdn.ailetv.workers.dev/9f544305-cae4-45d1-97d6-39b04097855d.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/38cea59d2891979e12d3216c3fc5934c" group-title="AILE TV Entertainment",Охота и Рыбалка
+http://cdn.ailetv.workers.dev/e362e083-1dd4-42b4-a2fa-cde41a71a119.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/09752287ff9b0bb7bed88df0a4e845f1" group-title="AILE TV Entertainment",Кухня ТВ
+http://cdn.ailetv.workers.dev/88b311cf-20f6-4b48-becd-21e6dbc9d840.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/ca5ca8df2fb29f2513c90c083c96b8a6" group-title="AILE TV Entertainment",Домашние животные
+http://cdn.ailetv.workers.dev/64168665-5219-455f-b757-f3b9c1e28938.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/3159cbf26600912f4c87751427bb0820" group-title="AILE TV News",Real TV
+http://cdn.ailetv.workers.dev/9f61afbe-154a-466d-bb99-d7f1ff5a7a73.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/0f3051b7db12b6a551c0f8b1252ec381" group-title="AILE TV News",ARB 24
+http://cdn.ailetv.workers.dev/9fb57c54-9800-43f0-ae43-d34a37ef3525.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/47a3047f19e3324ca955e158ff0fc5d1" group-title="AILE TV News",Baku TV
+http://cdn.ailetv.workers.dev/6d52433a-1bfc-4ee6-9547-8995435ca309.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/ec03c548a96d00b597e2f3c6203b1211" group-title="AILE TV News",APA TV
+http://cdn.ailetv.workers.dev/34f48fdf-1a26-485f-9dc6-1d228ae7513f.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/590ecc736b7f06d0aa3bd4ea14fcd6c9" group-title="AILE TV News",AnewZ
+http://cdn.ailetv.workers.dev/578f381f-9bb9-4c89-8e39-dcfd7404bf49.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/a9dec67f243a436069c79ef498554edf" group-title="AILE TV News",Euronews
+http://cdn.ailetv.workers.dev/65bd3946-ebc2-48db-9f00-669acc4df8e6.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/7c1fab1aaa39ce75933b432f6755421b" group-title="AILE TV News",Россия 24
+http://cdn.ailetv.workers.dev/4a85ecc1-1d0e-4600-b059-81887605c9ce.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/179edb3de1d9a356f2f4649bc46cc4a8" group-title="AILE TV News",МИР 24
+http://cdn.ailetv.workers.dev/7dd721bb-47cb-4e3c-926e-a190d93dae18.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/bd8dee05bb7b6abcbba7ca65cfb11d63" group-title="AILE TV News",TRT Haber
+http://cdn.ailetv.workers.dev/8a9a0f69-c182-4fca-8578-709ea95b91b2.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/7d4e50852c034ca174b29b18c0ec3b5f" group-title="AILE TV News",NTV
+http://cdn.ailetv.workers.dev/993952ed-e7fe-487e-bb65-09de7c0bad2e.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/33435df292ab2e74cb04437b0ce22e62" group-title="AILE TV Movies",Kinozal
+http://cdn.ailetv.workers.dev/db997967-6f59-443a-b497-e5a659b0efb4.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/ed7275e378334b5355adb5ba81109ca2" group-title="AILE TV Movies",Кинохит
+http://cdn.ailetv.workers.dev/8ef8536a-0986-4b6c-87da-f9078e784df4.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/316fd55e7a02af720dbf69adbec5c221" group-title="AILE TV Movies",Киносемья
+http://cdn.ailetv.workers.dev/bceed1f7-86fb-4370-83d5-31b7488c5423.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/49127c2ea38e30314d13576f6cad94d3" group-title="AILE TV Movies",Киносвидание
+http://cdn.ailetv.workers.dev/bad8053b-b8d7-45a5-826f-11176f4749cc.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/16b32d071e4f07f2594e88d75e636317" group-title="AILE TV Movies",Киномикс
+http://cdn.ailetv.workers.dev/53302e3c-0a06-4b01-925e-2df949ecc1f9.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/77eb956d003ed512c0149657101d5bd6" group-title="AILE TV Movies",Кинокомедия
+http://cdn.ailetv.workers.dev/ade14185-fca0-4ed7-b21e-43157d449a88.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/e56e0559a41a02ae52758f2f16188f95" group-title="AILE TV Movies",Кинопремьера
+http://cdn.ailetv.workers.dev/269aa2cd-d1f6-4de3-965c-98a86ac063c7.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/e6e9e8690627938fe519cb363b486632" group-title="AILE TV Movies",КИНЕКО
+http://cdn.ailetv.workers.dev/0472fc03-b918-42c0-bc4c-b5473d69a6bf.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/73c28c2fb3e3283cbc4adf9bcb184bf1" group-title="AILE TV Movies",Еврокино
+http://cdn.ailetv.workers.dev/7810a679-7db2-4314-8345-444b7f646f14.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/4cfca1dcfb9d432e4c6a146ecd0a1e96" group-title="AILE TV Movies",VİJU+ MEGAHIT
+http://cdn.ailetv.workers.dev/de808b12-b10b-4a68-b63a-c03e2eb2060f.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/7f9d9d0d98566e45adc9b63886edf8b2" group-title="AILE TV Music",MTV AZ
+http://cdn.ailetv.workers.dev/1383f6bf-15fe-464f-91c7-bc4366dbcb17.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/7207998838f53d7bb40637368fa7f6ce" group-title="AILE TV Music",Bridge TV
+http://cdn.ailetv.workers.dev/d1faa71d-e7d4-42dd-9cc7-f5a82b408d19.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/bb673db06a9f1f5d8cb3b90f66c6eb5f" group-title="AILE TV Music",BRIDGE TV Classic
+http://cdn.ailetv.workers.dev/1d877b5c-fb18-46dd-8726-e35fb3193596.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/e9d54859f6777cca4527b7677389c241" group-title="AILE TV Music",BRIDGE TV DELUXE
+http://cdn.ailetv.workers.dev/19e6643b-76a3-4805-a703-d67aeea8e423.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/cb44ae84a7e5f03f35d3ccf85ee8f72e" group-title="AILE TV Music",Bridge Hits
+http://cdn.ailetv.workers.dev/d00233a9-0f70-4ff7-8651-ce6416d5b9fd.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/9257f527a7fe470d1f5154e2cd12ec32" group-title="AILE TV Music",Музыка Первого
+http://cdn.ailetv.workers.dev/6526acd4-8533-4619-b802-630379ee1260.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/c37b9d3a6ec7f0f634d40e9e898d7668" group-title="AILE TV Music",ATV VIVACE
+http://cdn.ailetv.workers.dev/d5ef095e-ed40-4222-aebb-2069228f8c12.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/bb65550bcc4e92578a8a306e3fe5331f" group-title="AILE TV Music",RU TV
+http://cdn.ailetv.workers.dev/3d5ccf94-4fd7-45db-ace7-071750bde1b5.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/b4ab4d64d671d8fc06b1387d5c3ca2ef" group-title="AILE TV Music",ЖАРА
+http://cdn.ailetv.workers.dev/c3627fd5-f0f1-4732-a70d-c0d6ce845c36.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/eb4ae948b08abe534c86940ff8b4619a" group-title="AILE TV Music",ТНТ Music
+http://cdn.ailetv.workers.dev/39be1235-48ed-4977-ac91-1303b0ff1563.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/f348599dd3381bb8be1a3d81702b5bf0" group-title="AILE TV Kids",ARB Günəş
+http://cdn.ailetv.workers.dev/2556b4af-1764-49b6-994a-016b0c49f925.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/8f179b78970d4a2bdf50147373f110e7" group-title="AILE TV Kids",МАМА
+http://cdn.ailetv.workers.dev/507aaa39-1df3-4807-8389-a6e229d03bd7.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/a6d21d41af459c07d17e1b6f0b6e8f61" group-title="AILE TV Kids",РЫЖИЙ
+http://cdn.ailetv.workers.dev/6e617231-3db7-411a-92d1-2e14636547e2.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/6118dc5a25f5a7568313643a0abe0d28" group-title="AILE TV Kids",TIJI
+http://cdn.ailetv.workers.dev/df0522bd-fd90-4d7e-849e-42a92240e685.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/de71b2aac0490f3fd3ae553cf36ec5fe" group-title="AILE TV Kids",Уникум
+http://cdn.ailetv.workers.dev/e4d30a6f-40e6-4e10-af3e-d9a7fa2c82f9.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/b1f897e13f35d5456dfee4c32c4a894d" group-title="AILE TV Kids",Карусель
+http://cdn.ailetv.workers.dev/bd3d3a78-6afd-49b1-8e4a-866af1dcf077.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/1a8d60d3e5696db38699ff07d32537c7" group-title="AILE TV Kids",Gulli Girl
+http://cdn.ailetv.workers.dev/d4172a34-848c-4853-ab0e-dbabe026c207.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/7af26fcd50e3934033ee42e36559846c" group-title="AILE TV Kids",КАПИТАН ФАНТАСТИКА
+http://cdn.ailetv.workers.dev/e33909e0-6860-46d3-bc0d-ba5968dac197.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/7c05cfefe44bedcad6c41d4893d88242" group-title="AILE TV Kids",Мульт
+http://cdn.ailetv.workers.dev/7d525a1b-1d38-47c0-88c2-d76ab1e49f3a.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/fd146ff228d5f13bc8b2a757c2e6c1d9" group-title="AILE TV Kids",В ГОСТЯХ У СКАЗКИ
+http://cdn.ailetv.workers.dev/f648646a-3ed1-4ba9-b659-e644b6895f9f.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/3eecad13981d73fed6f59a0a369159c9" group-title="AILE TV Knowledge",Discovery Channel
+http://cdn.ailetv.workers.dev/11876409-6c4b-447f-a798-d291e0c409f3.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/509a94d156c8828753354886427f1d03" group-title="AILE TV Knowledge",Investigation Discovery
+http://cdn.ailetv.workers.dev/fead5e8a-4416-4e2b-8588-d11f25a390d6.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/8537f3559bf391dde941129a359b1ce7" group-title="AILE TV Knowledge",Nat Geo Wild
+http://cdn.ailetv.workers.dev/81791981-1d34-44da-ab62-0b4764ba3444.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/229add3623488bffc5fe7c33e1a8d117" group-title="AILE TV Knowledge",National Geographic
+http://cdn.ailetv.workers.dev/00b634a1-4b00-4641-9ae6-ff43ae8e09ca.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/326101c484b5b71779194d5c04f460b7" group-title="AILE TV Knowledge",Da Vinci Learning
+http://cdn.ailetv.workers.dev/ec6da436-2b06-4bf2-ae91-c48ddb9a77c4.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/60176e9e5c9309365fecc57d23592278" group-title="AILE TV Knowledge",VIJU+ HISTORY
+http://cdn.ailetv.workers.dev/36d1229d-1c65-41dd-a31f-0e4adc152d29.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/11ee976d791111c9e4349a9eee03285a" group-title="AILE TV Knowledge",VIJU+ EXPLORE
+http://cdn.ailetv.workers.dev/cbfc3b3d-fe41-4326-ac20-731b6455a397.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/170b32f90219fdfc7601f07e6d289f73" group-title="AILE TV Knowledge",VIJU+ NATURE
+http://cdn.ailetv.workers.dev/b1a1ebd3-5c24-4ff9-b399-3bfb43a690da.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/abb680d8179e27e7ce4dab71b7d4bd7c" group-title="AILE TV Knowledge",VIJU+ PLANET
+http://cdn.ailetv.workers.dev/bc183643-4022-4996-826b-42d34ffcdb55.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/b50f7dccdb371dc61f1421ba6c365ece" group-title="AILE TV Knowledge",Terra
+http://cdn.ailetv.workers.dev/89b8d592-14f3-4597-8235-d43514d1116e.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/fbcc211132dd2e9af97e00a6d89ef0ae" group-title="AILE TV Sport",İdman Azərbaycan
+http://cdn.ailetv.workers.dev/0faed66b-9c7b-40a0-a88e-02d7e751b8ab.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/dd3546eb9cbe9db0e393e3e009a17bd3" group-title="AILE TV Sport",CBC Sport
+http://cdn.ailetv.workers.dev/3f547c86-0a37-4f97-9686-7a72000b6a92.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/2d41c58fdeebfef5a6faea90a6e92144" group-title="AILE TV Sport",Eurosport 1
+http://cdn.ailetv.workers.dev/cd266c02-01b8-4eda-bf90-f0065ab6fdfd.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/4b84eb4afb8ca30b503b4489bf8cafae" group-title="AILE TV Sport",Матч! Планета
+http://cdn.ailetv.workers.dev/3d6432bc-bd83-4971-b64e-5b953abf4b40.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/1985b4f1df53cd40eec3f7b2a67cc963" group-title="AILE TV Sport",TRT Spor
+http://cdn.ailetv.workers.dev/91a7f5ab-71e1-4316-9193-0efcd91c9a44.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/7eb16ece29ba411ea8bed6a437ff0928" group-title="AILE TV Sport",ТВ СПОРТ
+http://cdn.ailetv.workers.dev/8c361b94-e276-4ff9-8e83-ad6d3380681b.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/7aaaae5a6841dde18b381c2c0ec18c8a" group-title="AILE TV Sport",Телеканал КХЛ
+http://cdn.ailetv.workers.dev/87182152-b912-47c1-af22-98e7d117b46b.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/ec08341604cf19f7eef9e0a41655bd21" group-title="AILE TV Sport",Бокс ТВ
+http://cdn.ailetv.workers.dev/28b069d2-2ec8-4b1c-9b3f-86f5bcec4891.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/5526a5ad72b85af1aee2a1769e4d69dc" group-title="AILE TV Sport",Setanta Sports 1
+http://cdn.ailetv.workers.dev/309fab36-e160-4d06-a20f-0b0031abae5d.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/7743011912d5bad8bf0ae382ba19973d" group-title="AILE TV Sport",Setanta Sports 2
+http://cdn.ailetv.workers.dev/4a005b3a-7731-49b3-80b2-014726f7bf74.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/68ba1b64df545752532bdf844ab03c28" group-title="AILE TV Full HD",AZ TV HD
+http://cdn.ailetv.workers.dev/0ab311ac-d729-49aa-b8d6-1f116869755c.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/4f10b720eeb743cf31900a5c6796a7a8" group-title="AILE TV Full HD",İctimai TV HD
+http://cdn.ailetv.workers.dev/a6e5d262-6d10-41ea-91bf-ef801bc37ad1.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/5cd89972ccacff295b63fe9fc935ab3f" group-title="AILE TV Full HD",ATV HD
+http://cdn.ailetv.workers.dev/1a7a5f87-c2d1-41f1-abf7-149969d40cb1.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/a4656f253c088c4442901ea11bae28d3" group-title="AILE TV Full HD",Mədəniyyət TV HD
+http://cdn.ailetv.workers.dev/58983b33-51f1-464e-ab7d-baa8c0b4ad3c.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/4c3366642fdddeaedf4a1eb1280eb57e" group-title="AILE TV Full HD",CBC Sport HD
+http://cdn.ailetv.workers.dev/2ff76746-4b54-4541-b6d2-2237f284ddc6.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/29c60c4b2971947bb060ed340ea5a1bf" group-title="AILE TV Full HD",İdman HD
+http://cdn.ailetv.workers.dev/1227eadc-66ef-4c8f-8022-c3eb950111ca.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/b46157d23fef819df7549dc79d5e503f" group-title="AILE TV Full HD",Первый HD
+http://cdn.ailetv.workers.dev/ac78bb68-f7c2-48f4-8a21-08193f9712fb.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/d135fc9cffa0cd3b5475895918bc090f" group-title="AILE TV Full HD",Россия 1 HD
+http://cdn.ailetv.workers.dev/7b57b273-f2fb-406d-93a1-6d0a3b0671ae.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/e6a6e874848c08426535c7f90f8cd5f6" group-title="AILE TV Full HD",НТВ HD
+http://cdn.ailetv.workers.dev/cab1f49c-813d-45be-bb80-a11d71122fd1.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/db03d48ea3a80d4cb2eb73e3bdfee9bd" group-title="AILE TV Full HD",NAT GEO WILD HD
+http://cdn.ailetv.workers.dev/e1271a04-14a5-4915-8cd7-690ba0e71500.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/44313fb141f6c66f149bc9c1142ecec4" group-title="AILE TV In English",TLC Eng
+http://cdn.ailetv.workers.dev/26627823-a6d1-4670-a363-dd5a010ba592.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/6602860ad38f9e47d9a9effaaca6e912" group-title="AILE TV In English",Investigation Discovery Eng
+http://cdn.ailetv.workers.dev/b4323f26-5fa5-4500-be8d-51a4e1cacb95.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/170b32f90219fdfc7601f07e6d289f73" group-title="AILE TV In English",VIJU+ NATURE Eng
+http://cdn.ailetv.workers.dev/35b7d89b-4612-4cd3-825f-ef0b3d8c0fdf.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/60176e9e5c9309365fecc57d23592278" group-title="AILE TV In English",VIJU+ HISTORY Eng
+http://cdn.ailetv.workers.dev/3857e4bb-baca-466c-8873-fbf8576b1c3d.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/11ee976d791111c9e4349a9eee03285a" group-title="AILE TV In English",VIJU+ EXPLORE Eng
+http://cdn.ailetv.workers.dev/959d6f6b-873a-4b57-bd70-6e2dea7ee4d1.m3u8
+#EXTINF:-1 tvg-logo="https://a3mw.aile.tv/storage/d35cad87944353e8e1b53e2382a77027" group-title="AILE TV In English",VIJU+ SPORT Eng
+http://cdn.ailetv.workers.dev/256b8698-28fd-41cb-86c8-6a132b427119.m3u8
